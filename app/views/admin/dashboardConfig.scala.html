@@ -1,0 +1,22 @@
+@(dashboardConfig: config.DashboardConfig.Config)
+
+@main("Dashboard - configuration") {
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Dashboard configuration</h1>
+            </div>
+
+            <div class="col-sm-12">
+                @helper.form(action = routes.AdminEndpoints.updateCurrentConfig, 'enctype -> "multipart/form-data") {
+                    <div class="form-group">
+                        <p class="form-control-static"><b>Config loaded from: </b><span style="color: red;">@dashboardConfig.dashboardJsonLocation</span></p>
+                        <textarea class="form-control" rows="30" cols="20" name="configFile">@dashboardConfig.dashboardJson</textarea>
+                    </div>
+                    <button type="submit" class="btn btn-success">Save configuration</button>
+                }
+            </div>
+
+        </div>
+    </div>
+}

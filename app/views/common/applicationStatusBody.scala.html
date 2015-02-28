@@ -1,0 +1,31 @@
+@(applicationStatus: model.DashboardModel.ApplicationStatus)
+
+<div class="panel-body">
+    <div style="height : 150px; overflow: hidden;">
+        <table>
+            <tr>
+                <th>Status</th>
+                <td>&nbsp</td>
+                <td>@common.applicationStatusIcon(applicationStatus)</td>
+            </tr>
+            <tr>
+                <th>Version</th>
+                <td>&nbsp</td>
+                <td><span class="badge">@applicationStatus.version</span></td>
+            </tr>
+            <tr>
+                <th>Status page</th>
+                <td>&nbsp</td>
+                <td><div><a href="@applicationStatus.environment.statusPageUrl">@applicationStatus.environment.statusPageUrl</a></div></td>
+            </tr>
+            @if(applicationStatus.host.isDefined){
+                <tr>
+                    <th>Host</th>
+                    <td>&nbsp</td>
+                    <td>@applicationStatus.host</td>
+                </tr>
+            }
+        </table>
+
+    </div>
+</div>

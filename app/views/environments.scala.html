@@ -1,0 +1,40 @@
+@(applicationStatusList: List[model.DashboardModel.ApplicationStatus])
+
+@import model.DashboardModel._
+
+@main("Dashboard - Environments") {
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Environments</h1>
+            </div>
+
+            @applicationStatusList.groupBy(_.environment.name).map {
+                case (environmentName, statusInAllEnvironments) => {
+                <div class="col-sm-4">
+                    <div class="panel panel-@if(statusInAllEnvironments.forall(!_.isError)){green}else{red}">
+                        <div class="panel-heading" onclick="location.href='/environments/@environmentName'" style="cursor: pointer;">
+                            <h3 class="panel-title">@environmentName <i class="fa fa-arrow-circle-right fa-lg"></i></h3>
+                        </div>
+                        <div class="panel-body">
+                            <div style="height: 200px;">
+                                <table>
+                                @statusInAllEnvironments.map { status: ApplicationStatus =>
+                                    <tr>
+                                      <td>@common.applicationStatusIcon(status)&nbsp;&nbsp;</td>
+                                      <td><a href="@status.environment.statusPageUrl">@status.application.name</a></td>
+                                      <td>&nbsp;</td>
+                                      <td><span class="badge">@status.version</span></td>
+                                    </tr>
+                                }
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                }
+            }
+
+        </div>
+    </div>
+}

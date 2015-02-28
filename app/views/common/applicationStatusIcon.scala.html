@@ -1,0 +1,11 @@
+@(applicationStatus: model.DashboardModel.ApplicationStatus)
+
+@if(applicationStatus.isError) {
+    @if(applicationStatus.statusPageReturned403) {
+        <i class="fa fa-exclamation-triangle fa-lg" style="color : #ddc71b ;" title="@applicationStatus.statusPageResponse.errorMessage" alt="@applicationStatus.statusPageResponse.errorMessage"></i>
+    } else {
+        <i class="fa fa-exclamation-circle fa-lg" style="color : orangered ;" title="@applicationStatus.statusPageResponse.errorMessage" alt="@applicationStatus.statusPageResponse.errorMessage"></i>
+    }
+} else {
+    <i class="fa fa-check-circle fa-lg" style="color: forestgreen;"></i>
+}

@@ -1,0 +1,43 @@
+@(dashboardConfigHistory: Array[config.DashboardConfig.ConfigHistoryItem])
+
+@main("Dashboard - configuration") {
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Dashboard configuration history</h1>
+            </div>
+
+            <div class="col-sm-12">
+                @if(dashboardConfigHistory.isEmpty) {
+                    Nothing to display.
+                } else {
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Config Name</th>
+                            <th>Last modified</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @dashboardConfigHistory.toSeq.sortBy(_.lastModified.getMillis).reverse.map { configHistoryItem =>
+                            <tr>
+                                <td>@configHistoryItem.name</td>
+                                <td>@configHistoryItem.lastModified.toString("yyyy-MM-dd hh:mm:ss")</td>
+                                <td>
+                                    <a class="btn btn-success btn-xs" href="/admin/viewConfig/@configHistoryItem.name">View</a>
+                                    @if(!configHistoryItem.isCurrent){
+                                        <a class="btn btn-danger btn-xs" href="/admin/deleteConfig/@configHistoryItem.name" onclick="javascript:return confirm('Delete @{configHistoryItem.name}?');">Delete</a>
+                                        <a class="btn btn-warning btn-xs" href="/admin/restoreConfig/@configHistoryItem.name" onclick="javascript:return confirm('Restore @{configHistoryItem.name}?');">Restore</a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                }
+            </div>
+
+        </div>
+    </div>
+}
