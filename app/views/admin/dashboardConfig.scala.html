@@ -8,12 +8,13 @@
             </div>
 
             <div class="col-sm-12">
-                @helper.form(action = routes.AdminEndpoints.updateCurrentConfig, 'enctype -> "multipart/form-data") {
+                @helper.form(action = routes.DashboardAdminController.updateCurrentConfig, 'enctype -> "multipart/form-data") {
                     <div class="form-group">
-                        <p class="form-control-static"><b>Config loaded from: </b><span style="color: red;">@dashboardConfig.dashboardJsonLocation</span></p>
+                        <button type="submit" class="btn btn-success" style="margin-bottom: 10px; float: right;">Update configuration</button>
+                        <p class="form-control-static"><b>Current config: </b><span style="color: red;">@dashboardConfig.dashboardJsonLocation</span></p>
                         <textarea class="form-control" rows="30" cols="20" name="configFile">@dashboardConfig.dashboardJson</textarea>
                     </div>
-                    <button type="submit" class="btn btn-success">Save configuration</button>
+
                 }
             </div>
 

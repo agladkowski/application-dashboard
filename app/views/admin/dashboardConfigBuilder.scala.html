@@ -1,0 +1,70 @@
+@(dashboardConfigJson: Option[String] = Option.empty,
+        applicationStatus: Option[model.DashboardModel.ApplicationStatus] = Option.empty,
+        formSubmissionErrors: Option[String] = Option.empty)
+
+@main("Dashboard - config builder") {
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Dashboard config builder</h1>
+            </div>
+
+            @if(formSubmissionErrors.isDefined) {
+                <div class="alert alert-danger">
+                    Status page URL and version regex required!
+                </div>
+            }
+
+            <div class="col-sm-12">
+                @helper.form(action = routes.DashboardAdminController.updateConfigBuilder()) {
+                    <div class="form-group">
+                        <label>
+                            Status page URL
+                            <i class="fa fa-question-circle fa-lg" style="color: darkblue;"
+                            data-container="body" data-toggle="popover" data-placement="right"
+                            data-content="Your status page URL. This can be HTML, JSON, XML - any page is good as long as it contains version of your app."
+                            data-original-title="" title="" aria-describedby="regexPopover"></i>
+                        </label>
+                        <input type="text" class="form-control" name="statusPageUrl"
+                            value="@if(applicationStatus.isDefined){@applicationStatus.get.environment.statusPageUrl}else{http://localhost:9000/status/Service1/version/3.0.0-SNAPSHOT}"/>
+                    </div>
+                    <div class="form-group">
+
+                        <label>
+                            Version regex
+                                <i class="fa fa-question-circle fa-lg" style="color: darkblue;"
+                                data-container="body" data-toggle="popover" data-placement="right"
+                                data-content="Regular expression for extracting app version from status page content. Typical value e.g. appVersion=([0-9A-Z_\-\.]*) - Recommended regex engine https://regex101.com/"
+                                data-original-title="" title="" aria-describedby="regexPopover"></i>
+                        </label>
+                        <input type="text" class="form-control" name="statusPageVersionRegex"
+                            value='@if(applicationStatus.isDefined){@applicationStatus.get.application.statusPageVersionRegex}else{"version"\:"([0-9A-Z_\-\.]*)"}'/>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success">Preview config</button>
+                    </div>
+                }
+            </div>
+
+            @if(applicationStatus.isDefined) {
+                <div class="col-sm-4">
+                    <div class="panel panel-@if(applicationStatus.get.isError) {red} else {green}">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"> @applicationStatus.get.environment.name</h3>
+                        </div>
+                        @common.applicationStatusBody(applicationStatus.get)
+                    </div>
+                </div>
+            }
+            @if(dashboardConfigJson.isDefined) {
+                <div class="col-sm-8">
+                    <div class="form-group">
+                        <textarea class="form-control" rows="15" cols="20">@dashboardConfigJson.get</textarea>
+                    </div>
+                </div>
+            }
+
+
+        </div>
+    </div>
+}

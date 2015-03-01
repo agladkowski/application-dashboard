@@ -25,7 +25,7 @@
                                 <td>@configHistoryItem.name</td>
                                 <td>@configHistoryItem.lastModified.toString("yyyy-MM-dd hh:mm:ss")</td>
                                 <td>
-                                    <a class="btn btn-success btn-xs" href="/admin/viewConfig/@configHistoryItem.name">View</a>
+                                    <a class="btn btn-success btn-xs" href="/admin/config/@configHistoryItem.name">View</a>
                                     @if(!configHistoryItem.isCurrent){
                                         <a class="btn btn-danger btn-xs" href="/admin/deleteConfig/@configHistoryItem.name" onclick="javascript:return confirm('Delete @{configHistoryItem.name}?');">Delete</a>
                                         <a class="btn btn-warning btn-xs" href="/admin/restoreConfig/@configHistoryItem.name" onclick="javascript:return confirm('Restore @{configHistoryItem.name}?');">Restore</a>

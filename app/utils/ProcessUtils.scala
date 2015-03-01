@@ -23,7 +23,7 @@ object ProcessUtils {
 
       if (commandResultStr.isEmpty) return Option(host)
 
-      val hostMatchingRegex: String = RegexUtils.findMatch(hostRegex.get.r, commandResultStr.get)
+      val hostMatchingRegex: String = RegexUtils.findMatch(hostRegex.get, commandResultStr.get)
 
       if (hostMatchingRegex.isEmpty) return Option(host)
 

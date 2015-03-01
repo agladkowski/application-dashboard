@@ -8,7 +8,7 @@ import utils.RegexUtils
  * For more information, consult the wiki.
  */
 class RegexUtilsTest {
-  val versionPattern = """\"version\"\:\"([0-9\.\-_A-Z]*)\"""".r
+  val versionPattern = """\"version\"\:\"([0-9\.\-_A-Z]*)\""""
 
   @Test
   def testVersionMatched(): Unit = {

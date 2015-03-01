@@ -5,7 +5,7 @@ import play.api.libs.json._
 import play.api.mvc._
 
 
-object TestStatusPages extends Controller {
+object TestStatusPagesController extends Controller {
   def status(appName: String = "AppName", versionParamName: String = "version", version: String = "1.0.0") = Action {
     generateStatusPage(appName, versionParamName, version)
   }

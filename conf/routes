@@ -3,19 +3,21 @@
 # ~~~~
 
 # Home page
-GET        /                                         controllers.Application.applications
-GET        /applications                             controllers.Application.applications
-GET        /environments                             controllers.Application.environments
-GET        /applications/:applicationName            controllers.Application.application(applicationName: String)
-GET        /environments/:environmentName            controllers.Application.environment(environmentName: String)
-GET        /status/:appName/:versionParamName/:version  controllers.TestStatusPages.status(appName: String, versionParamName: String, version: String)
-GET        /status/timeout                           controllers.TestStatusPages.timeout
-GET        /admin/env                                controllers.AdminEndpoints.statusPage
-GET        /admin/config                             controllers.AdminEndpoints.viewCurrentConfig
-POST       /admin/config                             controllers.AdminEndpoints.updateCurrentConfig
-GET        /admin/viewConfigHistory                  controllers.AdminEndpoints.viewConfigHistory
-GET        /admin/deleteConfig/:configName           controllers.AdminEndpoints.deleteConfig(configName: String)
-GET        /admin/viewConfig/:configName             controllers.AdminEndpoints.viewConfig(configName: String)
+GET        /                                         controllers.DashboardController.applications
+GET        /applications                             controllers.DashboardController.applications
+GET        /environments                             controllers.DashboardController.environments
+GET        /applications/:applicationName            controllers.DashboardController.application(applicationName: String)
+GET        /environments/:environmentName            controllers.DashboardController.environment(environmentName: String)
+GET        /status/:appName/:versionParamName/:version  controllers.TestStatusPagesController.status(appName: String, versionParamName: String, version: String)
+GET        /status/timeout                           controllers.TestStatusPagesController.timeout
+GET        /admin/status                             controllers.DashboardAdminController.status
+GET        /admin/config/current                     controllers.DashboardAdminController.viewCurrentConfig
+POST       /admin/config/current                     controllers.DashboardAdminController.updateCurrentConfig
+GET        /admin/config/builder                     controllers.DashboardAdminController.viewConfigBuilder
+POST       /admin/config/builder                     controllers.DashboardAdminController.updateConfigBuilder
+GET        /admin/config/history                     controllers.DashboardAdminController.viewConfigHistory
+GET        /admin/config/:configName                 controllers.DashboardAdminController.viewConfig(configName: String)
+GET        /admin/deleteConfig/:configName           controllers.DashboardAdminController.deleteConfig(configName: String)
 
 # Map static resources from the /public folder to the /assets URL path
 GET        /assets/*file                             controllers.Assets.at(path="/public", file)
