@@ -16,6 +16,8 @@ import scala.concurrent.Future
 
 object DashboardAdminController extends Controller {
 
+  // application status page
+
   def status = Action {
     val renderOpts = ConfigRenderOptions.defaults().setOriginComments(false).setComments(false).setJson(false);
     val applicationProperties = ConfigFactory.load
@@ -24,6 +26,8 @@ object DashboardAdminController extends Controller {
       applicationPropertiesAsString
     )
   }
+
+  // config CRUD operations
 
   def viewCurrentConfig = Action {
     Ok(
@@ -40,7 +44,29 @@ object DashboardAdminController extends Controller {
     Redirect(routes.DashboardAdminController.viewCurrentConfig())
   }
 
-  //case class ConfigBuilderView(dashboard: Option[Dashboard] = Option.empty, applicationStatus: Option[ApplicationStatus] = Option.empty, errors: Option[String] = Option.empty)
+  def viewConfigHistory = Action {
+    Ok(
+      views.html.admin.dashboardConfigHistory(DashboardConfig.getHistory())
+    )
+  }
+
+  def deleteConfig(configName: String) = Action {
+    DashboardConfig.deleteHistoryConfig(Option(configName))
+    Redirect(routes.DashboardAdminController.viewConfigHistory())
+  }
+
+  def restoreConfig(configName: String) = Action {
+    DashboardConfig.restoreConfig(Option(configName))
+    Redirect(routes.DashboardAdminController.viewConfigHistory())
+  }
+
+  def viewConfig(configName: String) = Action {
+    Ok(Json.parse(
+      DashboardConfig.viewConfig(Option(configName))
+    ))
+  }
+
+  // config builder
 
   def updateConfigBuilder = Action.async { implicit request =>
     val configBuilderForm = Form(
@@ -75,22 +101,5 @@ object DashboardAdminController extends Controller {
     Ok(
       views.html.admin.dashboardConfigBuilder()
     )
-  }
-
-  def viewConfigHistory = Action {
-    Ok(
-      views.html.admin.dashboardConfigHistory(DashboardConfig.getHistory())
-    )
-  }
-
-  def deleteConfig(configName: String) = Action {
-    DashboardConfig.deleteHistoryConfig(Option(configName))
-    Redirect(routes.DashboardAdminController.viewConfigHistory())
-  }
-
-  def viewConfig(configName: String) = Action {
-    Ok(Json.parse(
-      DashboardConfig.viewConfig(Option(configName))
-    ))
   }
 }

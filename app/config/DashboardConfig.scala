@@ -63,6 +63,13 @@ object DashboardConfig {
     }
   }
 
+  def restoreConfig(configName: Option[String]) = {
+    if (configName.isDefined && !dashboardConfigName.equals(configName)) { // making sure it's not current config
+      val configToRestore: String = scala.io.Source.fromFile(dashboardConfigHome + configName.get).mkString
+      updateConfig(configToRestore)
+    }
+  }
+
   def getHistory(): Array[ConfigHistoryItem] = {
     val dashboardConfigs: Array[File] = FileUtils.listFiles(dashboardConfigHome)
     dashboardConfigs.map { file =>

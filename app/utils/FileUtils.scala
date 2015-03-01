@@ -2,7 +2,7 @@ package utils
 
 import java.io.File
 import java.nio.charset.StandardCharsets
-import java.nio.file.{Paths, Files}
+import java.nio.file.{Files, Paths}
 
 /**
  * Created by andrzej on 22/02/2015.

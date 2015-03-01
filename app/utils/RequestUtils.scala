@@ -13,7 +13,7 @@ import scala.concurrent.Future
  * Created by andrzej on 01/03/2015.
  */
 object RequestUtils {
-  val STATUS_PAGE_REQUEST_TIMEOUT: Int = 2000 // IN SECONDS
+  val STATUS_PAGE_REQUEST_TIMEOUT: Int = 2000 // IN MILLIS
   val STATUS_PAGE_CACHE_IN_SECONDS: Int = 20 // IN SECONDS
 
   def buildApplicationStatusPage(application: Application, environment: Environment): Future[ApplicationStatus] = {
