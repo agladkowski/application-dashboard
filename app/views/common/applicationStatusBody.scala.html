@@ -8,13 +8,22 @@
                 <td>&nbsp</td>
                 <td>@common.applicationStatusIcon(applicationStatus)</td>
             </tr>
+            @if(applicationStatus.isError) {
             <tr>
-                <th>Version</th>
+                <th></th>
                 <td>&nbsp</td>
-                <td><span class="badge">@applicationStatus.version</span></td>
+                <td>@applicationStatus.statusPageResponse.errorMessage</td>
             </tr>
+            }
+            @if(!applicationStatus.isError) {
+                <tr>
+                    <th>Version</th>
+                    <td>&nbsp</td>
+                    <td><span class="badge">@applicationStatus.version</span></td>
+                </tr>
+            }
             <tr>
-                <th>Status page</th>
+                <th>Url</th>
                 <td>&nbsp</td>
                 <td><div><a href="@applicationStatus.environment.statusPageUrl">@applicationStatus.environment.statusPageUrl</a></div></td>
             </tr>

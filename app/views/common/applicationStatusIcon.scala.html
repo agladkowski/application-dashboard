@@ -1,11 +1,17 @@
-@(applicationStatus: model.DashboardModel.ApplicationStatus)
+@(status: model.DashboardModel.ApplicationStatus)
 
-@if(applicationStatus.isError) {
-    @if(applicationStatus.statusPageReturned403) {
-        <i class="fa fa-exclamation-triangle fa-lg" style="color : #ddc71b ;" title="@applicationStatus.statusPageResponse.errorMessage" alt="@applicationStatus.statusPageResponse.errorMessage"></i>
-    } else {
-        <i class="fa fa-exclamation-circle fa-lg" style="color : orangered ;" title="@applicationStatus.statusPageResponse.errorMessage" alt="@applicationStatus.statusPageResponse.errorMessage"></i>
-    }
-} else {
-    <i class="fa fa-check-circle fa-lg" style="color: forestgreen;"></i>
+@severityColor(status: model.DashboardModel.ApplicationStatus) = @{
+    if (status.forbiddenAccess) "gold"
+    else if (status.timeout) "gold"
+    else if (status.isError) "orangered"
+    else "forestgreen"
 }
+
+@statusIcon(status: model.DashboardModel.ApplicationStatus) = @{
+    if (status.forbiddenAccess) "fa-exclamation-triangle"
+    else if (status.timeout) "fa-clock-o"
+    else if (status.isError) "fa-exclamation-circle"
+        else "fa-check-circle"
+}
+
+<i class="fa @statusIcon(status) fa-lg" style="color: @severityColor(status);" title="@status.statusPageResponse.errorMessage" alt="@status.statusPageResponse.errorMessage"></i>

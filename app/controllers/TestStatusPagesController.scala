@@ -12,8 +12,12 @@ object TestStatusPagesController extends Controller {
 
   def timeout = Action {
     Logger.info("/timeout")
-    Thread.sleep(2000)
+    Thread.sleep(5000)
     generateStatusPage("AppName","version", "2.0.0-SNAPSHOT")
+  }
+
+  def forbidden = Action {
+    Forbidden("Unsufficient permissions")
   }
 
   def generateStatusPage(applicationName: String, versionParamName: String, version: String): Result = {

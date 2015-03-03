@@ -2,6 +2,7 @@ package model
 
 import com.google.gson.Gson
 import config.DashboardConfig
+import org.jboss.netty.handler.codec.http.HttpResponseStatus
 
 /**
  * Created by andrzej on 15/02/2015.
@@ -18,8 +19,11 @@ object DashboardModel {
     def isError:Boolean = {
       statusPageResponse.errorMessage.isDefined
     }
-    def statusPageReturned403:Boolean = {
-      statusPageResponse.httpStatus == 403
+    def forbiddenAccess:Boolean = {
+      statusPageResponse.httpStatus == HttpResponseStatus.FORBIDDEN.getCode
+    }
+    def timeout:Boolean = {
+      statusPageResponse.httpStatus == HttpResponseStatus.REQUEST_TIMEOUT.getCode
     }
   }
 

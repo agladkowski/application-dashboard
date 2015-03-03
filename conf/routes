@@ -10,6 +10,7 @@ GET        /applications/:applicationName            controllers.DashboardContro
 GET        /environments/:environmentName            controllers.DashboardController.environment(environmentName: String)
 GET        /status/:appName/:versionParamName/:version  controllers.TestStatusPagesController.status(appName: String, versionParamName: String, version: String)
 GET        /status/timeout                           controllers.TestStatusPagesController.timeout
+GET        /status/forbidden                         controllers.TestStatusPagesController.forbidden
 GET        /admin/status                             controllers.DashboardAdminController.status
 GET        /admin/config/current                     controllers.DashboardAdminController.viewCurrentConfig
 POST       /admin/config/current                     controllers.DashboardAdminController.updateCurrentConfig

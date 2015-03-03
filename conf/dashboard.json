@@ -76,7 +76,7 @@
         },
         {
           "name": "stage",
-          "statusPageUrl": "http://localhost:9000/status/Service4/service4.version/1.0.3"
+          "statusPageUrl": "http://localhost:9000/status/forbidden"
         },
         {
           "name": "prod",
