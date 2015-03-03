@@ -38,8 +38,6 @@ object DashboardController extends Controller {
     }
   }
 
-  // Utility methods
-
   def buildDashboardModel(applicationName: Option[String] = Option.empty, environmentName: Option[String] = Option.empty): Future[List[ApplicationStatus]] = {
     val applicationFilter: (Application) => Boolean = { application => if (applicationName.isDefined) application.name == applicationName.get else true }
     val applicationList: List[Application] = DashboardModel.create().applications.filter(applicationFilter).toList
@@ -55,8 +53,4 @@ object DashboardController extends Controller {
     val statusFutureList: Future[List[ApplicationStatus]] = Future.sequence(applicationStatusFutureList).map(_.toList)
     statusFutureList
   }
-
-
-
-
 }

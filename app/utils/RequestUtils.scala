@@ -47,6 +47,6 @@ object RequestUtils {
   }
 
   def buildRequestHeaders: (String, String) = {
-    "User-Agent" -> "Dashboard/1.0"
+    "User-Agent" -> "Dashboard/1.0 ()"
   }
 }

@@ -1,7 +1,7 @@
 package controllers
 
 import com.google.gson.GsonBuilder
-import com.typesafe.config.{ConfigFactory, ConfigRenderOptions}
+import com.typesafe.config.{Config, ConfigFactory, ConfigRenderOptions}
 import config.DashboardConfig
 import model.DashboardModel._
 import play.api.data.Forms._
@@ -19,8 +19,8 @@ object DashboardAdminController extends Controller {
   // application status page
 
   def status = Action {
-    val renderOpts = ConfigRenderOptions.defaults().setOriginComments(false).setComments(false).setJson(false);
-    val applicationProperties = ConfigFactory.load
+    val renderOpts: ConfigRenderOptions = ConfigRenderOptions.defaults().setOriginComments(false).setComments(false).setJson(false);
+    val applicationProperties: Config = ConfigFactory.load
     val applicationPropertiesAsString: String = applicationProperties.root().render(renderOpts)
     Ok(
       applicationPropertiesAsString
