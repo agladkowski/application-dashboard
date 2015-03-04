@@ -76,25 +76,25 @@ object DashboardAdminController extends Controller {
       )
     )
 
-    // form binding and validation
     val (statusPageVersionRegex, statusPageUrl) = configBuilderForm.bindFromRequest().get
-    if (Option(statusPageUrl).isEmpty || Option(statusPageVersionRegex).isEmpty) {
+
+    if (Option(statusPageUrl).getOrElse("").isEmpty || Option(statusPageVersionRegex).getOrElse("").isEmpty) {
       Future.successful(
         Ok(views.html.admin.dashboardConfigBuilder(Option.empty, Option.empty, Option("Status page url and version regex required!")))
       )
+    } else {
+      val env = Environment("test", statusPageUrl)
+      val application = Application("TestApp", statusPageVersionRegex, "", Array(env))
+      val dashboard = Dashboard(Array(application))
+      val dashboardJsonConfig: String = new GsonBuilder().setPrettyPrinting().create().toJson(dashboard)
+      val applicationStatusFuture: Future[ApplicationStatus] = RequestUtils.buildApplicationStatusPage(application, env)
+      applicationStatusFuture.map { applicationStatus =>
+        Ok(
+          views.html.admin.dashboardConfigBuilder(Option(dashboardJsonConfig), Option(applicationStatus), Option.empty)
+        )
+      }
     }
 
-    // testing version regex and returning sample dashboard.json
-    val env = Environment("test", statusPageUrl)
-    val application = Application("TestApp", statusPageVersionRegex, "", Array(env))
-    val dashboard = Dashboard(Array(application))
-    val dashboardJsonConfig: String = new GsonBuilder().setPrettyPrinting().create().toJson(dashboard)
-    val applicationStatusFuture: Future[ApplicationStatus] = RequestUtils.buildApplicationStatusPage(application, env)
-    applicationStatusFuture.map { applicationStatus =>
-      Ok(
-        views.html.admin.dashboardConfigBuilder(Option(dashboardJsonConfig), Option(applicationStatus), Option.empty)
-      )
-    }
   }
 
   def viewConfigBuilder = Action {
