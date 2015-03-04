@@ -54,3 +54,10 @@ UI (HTML/Css/JavaSctipt)
 Back-end (scala)
 - Play framework
     - https://www.playframework.com/
+
+Roadmap
+==
+- Refresh individual application/environment views (refresh icon)
+- Load all the application/environment views asynchronously in the HTML UI
+- Add view filters
+- Improve config wizard
