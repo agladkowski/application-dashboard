@@ -17,11 +17,11 @@
                             <h3 class="panel-title">@applicationName <i class="fa fa-arrow-circle-right fa-lg"></i></h3>
                         </div>
                         <div class="panel-body">
-                            <div style="height: 120px;">
+                            <div style="height: 120px; overflow: hidden;">
                                 <table>
                                     @statusInAllEnvironments.map { status: ApplicationStatus =>
                                     <tr>
-                                      <td>@common.applicationStatusIcon(status)&nbsp;</td>
+                                      <td>@common.applicationStatusIcon(status)</td>
                                       <td><a href="@status.environment.statusPageUrl">@status.environment.name</a></td>
                                       <td>&nbsp;&nbsp;</td>
                                       <td><span class="badge">@status.version</span></td>

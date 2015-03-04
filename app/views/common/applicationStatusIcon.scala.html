@@ -11,7 +11,7 @@
     if (status.forbiddenAccess) "fa-exclamation-triangle"
     else if (status.timeout) "fa-clock-o"
     else if (status.isError) "fa-exclamation-circle"
-        else "fa-check-circle"
+    else "fa-check-circle"
 }
 
-<i class="fa @statusIcon(status) fa-lg" style="color: @severityColor(status);" title="@status.statusPageResponse.errorMessage" alt="@status.statusPageResponse.errorMessage"></i>
+<i class="fa @statusIcon(status) fa-lg" style="color: @severityColor(status); padding-right: 5px;" title="@status.statusPageResponse.errorMessage" alt="@status.statusPageResponse.errorMessage"></i>
