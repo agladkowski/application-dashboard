@@ -6,6 +6,7 @@ import org.jboss.netty.handler.codec.http.HttpResponseStatus
 
 /**
  * Created by andrzej on 15/02/2015.
+ *
  */
 object DashboardModel {
 
@@ -16,15 +17,9 @@ object DashboardModel {
   case class Environment(name: String, statusPageUrl: String)
 
   case class ApplicationStatus(application: Application, environment: Environment, version: Option[String], host: Option[String], statusPageResponse: WebPageResponse) {
-    def isError:Boolean = {
-      statusPageResponse.errorMessage.isDefined
-    }
-    def forbiddenAccess:Boolean = {
-      statusPageResponse.httpStatus == HttpResponseStatus.FORBIDDEN.getCode
-    }
-    def timeout:Boolean = {
-      statusPageResponse.httpStatus == HttpResponseStatus.REQUEST_TIMEOUT.getCode
-    }
+    val isError: Boolean = statusPageResponse.errorMessage.isDefined
+    val forbiddenAccess: Boolean = HttpResponseStatus.FORBIDDEN.getCode == statusPageResponse.httpStatus
+    val timeout: Boolean = HttpResponseStatus.REQUEST_TIMEOUT.getCode == statusPageResponse.httpStatus
   }
 
   case class WebPageResponse(content: String, httpStatus: Int, errorMessage: Option[String])

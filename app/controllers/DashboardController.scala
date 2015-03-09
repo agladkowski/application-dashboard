@@ -21,7 +21,7 @@ object DashboardController extends Controller {
   }
 
   def environment(environmentName: String) = Action.async {
-    buildDashboardModel(Option.empty, Option(environmentName)).map { applicationStatus =>
+    buildDashboardModel(None, Option(environmentName)).map { applicationStatus =>
       Ok(views.html.environment(applicationStatus))
     }
   }
@@ -38,19 +38,26 @@ object DashboardController extends Controller {
     }
   }
 
-  def buildDashboardModel(applicationName: Option[String] = Option.empty, environmentName: Option[String] = Option.empty): Future[List[ApplicationStatus]] = {
-    val applicationFilter: (Application) => Boolean = { application => if (applicationName.isDefined) application.name == applicationName.get else true }
-    val applicationList: List[Application] = DashboardModel.create().applications.filter(applicationFilter).toList
-    val applicationStatusFutureList: List[Future[ApplicationStatus]] = applicationList.flatMap { application =>
+  def buildDashboardModel(applicationName: Option[String] = None, environmentName: Option[String] = None): Future[List[ApplicationStatus]] = {
+    val applicationList: List[Application] = getApplications(applicationName)
+    val applicationStatusFutureList: List[Future[ApplicationStatus]] =
       for {
+        application <- applicationList
         environment <- application.environments
         if environmentName.isEmpty || environment.name == environmentName.get
       } yield {
         RequestUtils.buildApplicationStatusPage(application, environment)
       }
-    }
 
-    val statusFutureList: Future[List[ApplicationStatus]] = Future.sequence(applicationStatusFutureList).map(_.toList)
-    statusFutureList
+    Future.sequence(applicationStatusFutureList)
   }
+
+  def getApplications(applicationName: Option[String] = None): List[Application] = {
+    val applicationList: List[Application] = DashboardModel.create().applications.toList
+    applicationName match {
+      case Some(name) => applicationList.filter( application => application.name == name)
+      case None => applicationList
+    }
+  }
+
 }
