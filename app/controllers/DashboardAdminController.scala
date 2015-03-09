@@ -35,7 +35,7 @@ object DashboardAdminController extends Controller {
     )
   }
 
-  def updateCurrentConfig = Action { implicit request =>
+  def updateCurrentConfig() = Action { implicit request =>
     val configForm = Form(
         "configFile" -> nonEmptyText
     )
@@ -46,7 +46,7 @@ object DashboardAdminController extends Controller {
 
   def viewConfigHistory = Action {
     Ok(
-      views.html.admin.dashboardConfigHistory(DashboardConfig.getHistory())
+      views.html.admin.dashboardConfigHistory(DashboardConfig.getHistory)
     )
   }
 
@@ -61,14 +61,13 @@ object DashboardAdminController extends Controller {
   }
 
   def viewConfig(configName: String) = Action {
-    Ok(Json.parse(
-      DashboardConfig.viewConfig(Option(configName))
-    ))
+    Ok(
+      Json.parse(DashboardConfig.viewConfig(configName))
+    )
   }
 
   // config builder
-
-  def updateConfigBuilder = Action.async { implicit request =>
+  def updateConfigBuilder() = Action.async { implicit request =>
     val configBuilderForm = Form(
       tuple(
         "statusPageVersionRegex" -> text,

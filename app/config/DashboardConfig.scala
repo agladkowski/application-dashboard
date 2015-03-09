@@ -13,42 +13,48 @@ import scala.io.{BufferedSource, Source}
 
 /**
  * Created by andrzej on 22/02/2015.
+ *
  */
 object DashboardConfig {
-  val dashboardConfigName: String = "dashboard.json"
-  val dashboardConfigHome: String = System.getProperty("user.home") + File.separator + ".dashboard-home" + File.separator
-  val logger: slf4j.Logger = LoggerFactory.getLogger(DashboardConfig.getClass)
+  val dashboardConfigName = "dashboard.json"
+  val dashboardConfigHome = System.getProperty("user.home") + File.separator + ".dashboard-home" + File.separator
+
+  val logger = LoggerFactory.getLogger(DashboardConfig.getClass)
 
   case class Config(dashboardJsonLocation: String, dashboardJson: String) {
-    def isEmbedded: Boolean = {
+    val isEmbedded: Boolean = {
       dashboardJsonLocation.startsWith("embedded")
     }
   }
 
   case class ConfigHistoryItem(name: String, lastModified: DateTime, filePath: String) {
-    def isCurrent: Boolean = {
-      return name.equals(dashboardConfigName)
+    val isCurrent: Boolean = {
+      name == dashboardConfigName
     }
   }
 
   // ---------------------------------------------------------------------------------
 
   def get(): Config = {
-    val dashboardConfigOverride: Option[Config] = loadConfigFromFile(Option(dashboardConfigHome + dashboardConfigName))
-    if (dashboardConfigOverride.isDefined) {
-      return dashboardConfigOverride.get
+    loadConfigFromFile(Some(dashboardConfigHome + dashboardConfigName)).orElse {
+      loadConfigFromFile(Play.configuration.getString("dashboard.config.location"))
+    }.getOrElse {
+      logger.info("Loading default dashboard.json")
+      val inputJsonStream: InputStream = Thread.currentThread().getContextClassLoader.getResourceAsStream(dashboardConfigName)
+      val dashboardJson = scala.io.Source.fromInputStream(inputJsonStream).mkString
+      Config("embedded:dashboard.json", dashboardJson)
     }
+  }
 
-    val externalDashboardConfig: Option[Config] = loadConfigFromFile(Play.configuration.getString("dashboard.config.location"))
-    if (externalDashboardConfig.isDefined) {
-      return externalDashboardConfig.get
+  def getHistory: Array[ConfigHistoryItem] = {
+    val dashboardConfigs: Array[File] = FileUtils.listFiles(dashboardConfigHome)
+    dashboardConfigs.map { file =>
+      ConfigHistoryItem(file.getName, new DateTime(file.lastModified()), file.getAbsolutePath)
     }
+  }
 
-    logger.info("Loading default dashboard.json")
-
-    val inputJsonStream: InputStream = Thread.currentThread().getContextClassLoader.getResourceAsStream(dashboardConfigName)
-    val dashboardJson = scala.io.Source.fromInputStream(inputJsonStream).mkString
-    Config("embedded:dashboard.json", dashboardJson)
+  def viewConfig(configName: String) = {
+    readLines(dashboardConfigHome + configName)
   }
 
   def updateConfig(newConfigFileContent: String) = {
@@ -58,55 +64,51 @@ object DashboardConfig {
   }
 
   def deleteHistoryConfig(configName: Option[String]) = {
-    if (configName.isDefined && !dashboardConfigName.equals(configName)) { // making sure it's not current config
-      FileUtils.delete(dashboardConfigHome + configName.get)
-    }
+    configName
+      .filter( path => dashboardConfigName != path) // making sure it's not current config
+      .map{ path =>
+        FileUtils.delete(dashboardConfigHome + path)
+      }
   }
 
   def restoreConfig(configName: Option[String]) = {
-    if (configName.isDefined && !dashboardConfigName.equals(configName)) { // making sure it's not current config
-      val configToRestore: String = scala.io.Source.fromFile(dashboardConfigHome + configName.get).mkString
-      updateConfig(configToRestore)
-    }
+    configName
+      .filter( path => dashboardConfigName != path) // making sure it's not current config
+      .map{ path =>
+        val configToRestore = readLines(dashboardConfigHome + path)
+        updateConfig(configToRestore)
+      }
   }
 
-  def getHistory(): Array[ConfigHistoryItem] = {
-    val dashboardConfigs: Array[File] = FileUtils.listFiles(dashboardConfigHome)
-    dashboardConfigs.map { file =>
-      ConfigHistoryItem(file.getName, new DateTime(file.lastModified()), file.getAbsolutePath)
-    }
-  }
-
-  def viewConfig(configName: Option[String]) = {
-    scala.io.Source.fromFile(dashboardConfigHome + configName.get).mkString
+  private def readLines(path: String): String = {
+    val source = Source.fromFile(path)
+    val body = source.mkString
+    source.close()
+    body
   }
 
   // ----------------------------------------------------------------------------------
 
-  def loadConfigFromFile(dashboardConfigFile: Option[String]): Option[Config] = {
-    try {
-      if (dashboardConfigFile.isDefined) {
-        val source: BufferedSource = Source.fromFile(dashboardConfigFile.get)
-        val dashboardJson = source.mkString
-        source.close()
-        logger.info(s"Loading configuration from ${dashboardConfigFile}")
-        return Some(Config(dashboardConfigFile.get, dashboardJson))
+  private def loadConfigFromFile(dashboardConfigFile: Option[String]): Option[Config] = {
+    dashboardConfigFile
+      .filter( path => new File(path).exists()) // check file exists
+      .map{ path =>
+        val dashboardJson = readLines(path)
+        logger.info(s"Loading configuration from $dashboardConfigFile")
+        Config(dashboardConfigFile.get, dashboardJson)
       }
-    } catch {
-      case e: Exception => logger.info(s"Unable to load configuration from ${dashboardConfigFile}")
-    }
-    None
   }
 
-  def archiveCurrentConfig() = {
+  private def archiveCurrentConfig() = {
     val currentConfig: Config = get()
     val dashboardConfigToArchive: String = currentConfig.dashboardJson
     val archiveConfigFile: String = generateArchiveFileName
     FileUtils.save(archiveConfigFile, dashboardConfigToArchive)
   }
 
-  def generateArchiveFileName: String = {
+  private def generateArchiveFileName: String = {
     val currentDate = new DateTime().toString("yyyy-MM-dd_hh.mm.ss.sss")
-    s"${dashboardConfigHome}${dashboardConfigName}.${currentDate}"
+    s"$dashboardConfigHome$dashboardConfigName.$currentDate"
   }
+
 }

@@ -17,7 +17,7 @@ object TestStatusPagesController extends Controller {
   }
 
   def forbidden = Action {
-    Forbidden("Unsufficient permissions")
+    Forbidden("Insufficient permissions")
   }
 
   def generateStatusPage(applicationName: String, versionParamName: String, version: String): Result = {
