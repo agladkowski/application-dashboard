@@ -1,6 +1,6 @@
 @(applicationStatusList: List[model.DashboardModel.ApplicationStatus])
 
-@import model.DashboardModel._
+@import model.DashboardModel._ ;  val statusDivHeight: String = 20 + 20 * applicationStatusList.groupBy(_.environment.name).map(_._2.size).max + "px"
 
 @main("Dashboard - Environments") {
     <div class="container-fluid">
@@ -12,12 +12,12 @@
             @applicationStatusList.groupBy(_.environment.name).map {
                 case (environmentName, statusInAllEnvironments) => {
                 <div class="col-sm-4">
-                    <div class="panel panel-@if(statusInAllEnvironments.forall(!_.isError)){green}else{red}">
+                    <div class="panel panel-@if(statusInAllEnvironments.forall(!_.error)){green}else{red}">
                         <div class="panel-heading" onclick="location.href='/environments/@environmentName'" style="cursor: pointer;">
                             <h3 class="panel-title">@environmentName <i class="fa fa-arrow-circle-right fa-lg"></i></h3>
                         </div>
                         <div class="panel-body">
-                            <div style="height: 200px; overflow: hidden;">
+                            <div style="height: @statusDivHeight; overflow: hidden;">
                                 <table>
                                 @statusInAllEnvironments.map { status: ApplicationStatus =>
                                     <tr>

@@ -50,7 +50,7 @@
 
             @if(applicationStatus.isDefined) {
                 <div class="col-sm-4">
-                    <div class="panel panel-@if(applicationStatus.get.isError) {red} else {green}">
+                    <div class="panel panel-@if(applicationStatus.get.error) {red} else {green}">
                         <div class="panel-heading">
                             <h3 class="panel-title"> @applicationStatus.get.environment.name</h3>
                         </div>

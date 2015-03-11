@@ -8,14 +8,14 @@
                 <td>&nbsp</td>
                 <td>@common.applicationStatusIcon(applicationStatus)</td>
             </tr>
-            @if(applicationStatus.isError) {
+            @if(applicationStatus.error) {
             <tr>
                 <th></th>
                 <td>&nbsp</td>
                 <td>@applicationStatus.statusPageResponse.errorMessage</td>
             </tr>
             }
-            @if(!applicationStatus.isError) {
+            @if(!applicationStatus.error) {
                 <tr>
                     <th>Version</th>
                     <td>&nbsp</td>

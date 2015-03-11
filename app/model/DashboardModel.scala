@@ -14,11 +14,11 @@ object DashboardModel {
 
   case class Application(name: String, statusPageVersionRegex: String, hostRegex: String = "", environments: Array[Environment])
 
-  case class Environment(name: String, statusPageUrl: String)
+  case class Environment(name: String, statusPageUrl: String, optional: Boolean = false)
 
   case class ApplicationStatus(application: Application, environment: Environment, version: Option[String], host: Option[String], statusPageResponse: WebPageResponse) {
-    val isError: Boolean = statusPageResponse.errorMessage.isDefined
-    val forbiddenAccess: Boolean = HttpResponseStatus.FORBIDDEN.getCode == statusPageResponse.httpStatus
+    val error: Boolean = statusPageResponse.errorMessage.isDefined
+    val forbidden: Boolean = HttpResponseStatus.FORBIDDEN.getCode == statusPageResponse.httpStatus
     val timeout: Boolean = HttpResponseStatus.REQUEST_TIMEOUT.getCode == statusPageResponse.httpStatus
   }
 

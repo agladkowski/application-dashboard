@@ -103,7 +103,8 @@
         },
         {
           "name": "perf",
-          "statusPageUrl": "http://localhost:9000/status/Service5/service5.version/7.0"
+          "statusPageUrl": "http://localhost:9000/status/Service5/xxx",
+          "optional": "true"
         },
         {
           "name": "stage",

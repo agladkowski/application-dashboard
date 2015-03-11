@@ -1,16 +1,16 @@
 @(status: model.DashboardModel.ApplicationStatus)
 
 @severityColor(status: model.DashboardModel.ApplicationStatus) = @{
-    if (status.forbiddenAccess) "gold"
+    if (status.forbidden) "gold"
     else if (status.timeout) "gold"
-    else if (status.isError) "orangered"
+    else if (status.error) "orangered"
     else "forestgreen"
 }
 
 @statusIcon(status: model.DashboardModel.ApplicationStatus) = @{
-    if (status.forbiddenAccess) "fa-exclamation-triangle"
+    if (status.forbidden) "fa-exclamation-triangle"
     else if (status.timeout) "fa-clock-o"
-    else if (status.isError) "fa-exclamation-circle"
+    else if (status.error) "fa-exclamation-circle"
     else "fa-check-circle"
 }
 

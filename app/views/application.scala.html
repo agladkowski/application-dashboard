@@ -14,7 +14,7 @@
 
             @applicationStatusList.map { applicationStatus: ApplicationStatus =>
             <div class="col-sm-4">
-                <div class="panel panel-@if(applicationStatus.isError){red}else{green}">
+                <div class="panel panel-@if(applicationStatus.error){red}else{green}">
                     <div class="panel-heading">
                         <h3 class="panel-title"> @applicationStatus.environment.name</h3>
                     </div>
