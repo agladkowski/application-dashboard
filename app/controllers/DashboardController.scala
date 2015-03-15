@@ -20,6 +20,12 @@ object DashboardController extends Controller {
     }
   }
 
+  def applicationDivAjax(applicationName: String) = Action.async {
+    buildDashboardModel(Option(applicationName)).map { applicationStatus =>
+      Ok(views.html.common.applicationDiv(applicationStatus))
+    }
+  }
+
   def environment(environmentName: String) = Action.async {
     buildDashboardModel(None, Option(environmentName)).map { applicationStatus =>
       Ok(views.html.environment(applicationStatus))

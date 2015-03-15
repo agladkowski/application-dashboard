@@ -2,6 +2,14 @@
 
 @import model.DashboardModel._; val statusDivHeight: String = 20 * statusList.map(_.application.environments.size).max + "px"
 
+@appStatusColor(statusInAllEnvironments: List[model.DashboardModel.ApplicationStatus]) = @{
+    if(statusInAllEnvironments.filter(!_.environment.optional).forall(!_.error)){
+        "green"
+    } else {
+        "red"
+    }
+}
+
 @main("Dashboard - Applications") {
     <div class="container-fluid">
         <div class="row">
@@ -11,23 +19,19 @@
 
             @statusList.groupBy(_.application.name).toSeq.sortBy(_._1).map {
                 case (applicationName, statusInAllEnvironments) => {
-                <div class="col-sm-3">
-                    <div class="panel panel-@if(statusInAllEnvironments.filter(!_.environment.optional).forall(!_.error)){green}else{red}" >
-                        <div class="panel-heading" onclick="location.href='/applications/@applicationName'" style="cursor: pointer;">
-                            <h3 class="panel-title">@applicationName <i class="fa fa-arrow-circle-right fa-lg"></i></h3>
+                <div class="col-sm-3" application-name="@applicationName">
+                    <div class="panel panel-@appStatusColor(statusInAllEnvironments)" >
+                        <div class="panel-heading">
+                            <h3 class="panel-title">@applicationName
+                                <i class="fa fa-arrow-circle-right fa-lg cursor-pointer" onclick="location.href='/applications/@applicationName'"></i>
+                                <i class="fa fa-refresh fa-lg cursor-pointer" onclick="loadApplicationStatusDiv('@applicationName');" style="float: right;"></i>
+                            </h3>
+
                         </div>
                         <div class="panel-body">
-                            <div style="height: @statusDivHeight; overflow: hidden;">
-                                <table>
-                                    @statusInAllEnvironments.map { status: ApplicationStatus =>
-                                    <tr>
-                                      <td>@common.applicationStatusIcon(status)</td>
-                                      <td><a href="@status.environment.statusPageUrl">@status.environment.name</a></td>
-                                      <td>&nbsp;&nbsp;</td>
-                                      <td><span class="badge">@status.version</span></td>
-                                    </tr>
-                                    }
-                                </table>
+
+                            <div id="@applicationName-status-div" style="height: @statusDivHeight; overflow: hidden;">
+                                @common.applicationDiv(statusInAllEnvironments)
                             </div>
                         </div>
                     </div>

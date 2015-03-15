@@ -1,0 +1,14 @@
+@(statusInAllEnvironments: List[model.DashboardModel.ApplicationStatus])
+
+@import model.DashboardModel._;
+
+<table>
+@statusInAllEnvironments.map { status: ApplicationStatus =>
+    <tr>
+        <td>@common.applicationStatusIcon(status)</td>
+        <td><a href="@status.environment.statusPageUrl">@status.environment.name</a></td>
+        <td>&nbsp;&nbsp;</td>
+        <td><span class="badge">@status.version</span></td>
+    </tr>
+}
+</table>

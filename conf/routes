@@ -6,6 +6,7 @@
 GET         /                                                  controllers.DashboardController.applications
 GET         /applications                                      controllers.DashboardController.applications
 GET         /environments                                      controllers.DashboardController.environments
+GET         /applications/:applicationName/ajax                controllers.DashboardController.applicationDivAjax(applicationName: String)
 GET         /applications/:applicationName                     controllers.DashboardController.application(applicationName: String)
 GET         /environments/:environmentName                     controllers.DashboardController.environment(environmentName: String)
 GET         /status/:appName/:versionParamName/:version        controllers.TestStatusPagesController.status(appName: String, versionParamName: String, version: String)
