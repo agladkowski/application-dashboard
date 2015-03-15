@@ -3,25 +3,26 @@
 # ~~~~
 
 # Home page
-GET        /                                         controllers.DashboardController.applications
-GET        /applications                             controllers.DashboardController.applications
-GET        /environments                             controllers.DashboardController.environments
-GET        /applications/:applicationName            controllers.DashboardController.application(applicationName: String)
-GET        /environments/:environmentName            controllers.DashboardController.environment(environmentName: String)
-GET        /status/:appName/:versionParamName/:version  controllers.TestStatusPagesController.status(appName: String, versionParamName: String, version: String)
-GET        /status/timeout                           controllers.TestStatusPagesController.timeout
-GET        /status/forbidden                         controllers.TestStatusPagesController.forbidden
-GET        /admin/status                             controllers.DashboardAdminController.status
-GET        /admin/config/current                     controllers.DashboardAdminController.viewCurrentConfig
-POST       /admin/config/current                     controllers.DashboardAdminController.updateCurrentConfig
-GET        /admin/config/builder                     controllers.DashboardAdminController.viewConfigBuilder
-POST       /admin/config/builder                     controllers.DashboardAdminController.updateConfigBuilder
-GET        /admin/config/history                     controllers.DashboardAdminController.viewConfigHistory
-GET        /admin/config/:configName/view            controllers.DashboardAdminController.viewConfig(configName: String)
-GET        /admin/config/:configName/delete          controllers.DashboardAdminController.deleteConfig(configName: String)
-GET        /admin/config/:configName/restore         controllers.DashboardAdminController.restoreConfig(configName: String)
+GET         /                                                  controllers.DashboardController.applications
+GET         /applications                                      controllers.DashboardController.applications
+GET         /environments                                      controllers.DashboardController.environments
+GET         /applications/:applicationName                     controllers.DashboardController.application(applicationName: String)
+GET         /environments/:environmentName                     controllers.DashboardController.environment(environmentName: String)
+GET         /status/:appName/:versionParamName/:version        controllers.TestStatusPagesController.status(appName: String, versionParamName: String, version: String)
+GET         /status/timeout                                    controllers.TestStatusPagesController.timeout
+GET         /status/forbidden                                  controllers.TestStatusPagesController.forbidden
+GET         /admin/status                                      controllers.DashboardAdminController.status
+GET         /admin/config/current                              controllers.DashboardAdminController.viewCurrentConfig
+POST        /admin/config/current                              controllers.DashboardAdminController.updateCurrentConfig
+GET         /admin/config/builder                              controllers.DashboardAdminController.viewConfigBuilder
+POST        /admin/config/builder                              controllers.DashboardAdminController.updateConfigBuilder
+GET         /admin/config/history                              controllers.DashboardAdminController.viewConfigHistory
+GET         /admin/config/:configName/view                     controllers.DashboardAdminController.viewConfig(configName: String)
+GET         /admin/config/:configName/delete                   controllers.DashboardAdminController.deleteConfig(configName: String)
+GET         /admin/config/:configName/restore                  controllers.DashboardAdminController.restoreConfig(configName: String)
 
 # Map static resources from the /public folder to the /assets URL path
-GET        /assets/*file                             controllers.Assets.at(path="/public", file)
+GET         /assets/*file                                      controllers.Assets.at(path="/public", file)
+GET         /webjars/*file                                     controllers.WebJarAssets.at(file)
 
     
