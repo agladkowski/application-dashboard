@@ -14,14 +14,17 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">Applications</h1>
+                <h1 class="page-header">
+                    Application
+                    <input id="applicationNameFilterDiv" class="form-control filter" placeholder="Filter app name" autofocus >
+                </h1>
             </div>
 
             @statusList.groupBy(_.application.name).toSeq.sortBy(_._1).map {
                 case (applicationName, statusInAllEnvironments) => {
                 <div class="col-sm-3" application-name="@applicationName">
                     <div class="panel panel-@appStatusColor(statusInAllEnvironments)" >
-                        <div class="panel-heading">
+                        <div class="panel-heading" style="overflow: hidden;">
                             <h3 class="panel-title">@applicationName
                                 <i class="fa fa-arrow-circle-right fa-lg cursor-pointer" onclick="location.href='/applications/@applicationName'"></i>
                                 <i class="fa fa-refresh fa-lg cursor-pointer" onclick="loadApplicationStatusDiv('@applicationName');" style="float: right;"></i>
@@ -31,7 +34,7 @@
                         <div class="panel-body">
 
                             <div id="@applicationName-status-div" style="height: @statusDivHeight; overflow: hidden;">
-                                @common.applicationDiv(statusInAllEnvironments)
+                                @common.applicationStatusList(statusInAllEnvironments)
                             </div>
                         </div>
                     </div>

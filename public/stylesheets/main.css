@@ -9,3 +9,8 @@
     cursor: pointer;
 }
 
+.filter {
+    display: inline !important;
+    width: 50% !important;;
+    float: right !important;
+}

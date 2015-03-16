@@ -5,6 +5,23 @@ function loadApplicationStatusDiv(applicationName) {
 }
 
 function filterApplications(applicationNamePattern) {
-    if (applicationNamePattern)
-    $.find('.col-sm-3')[1].attributes['application-name']
+    if (!$.trim(applicationNamePattern).length) {
+        $('.col-sm-3').each(function( index ) {
+            $( this ).show();
+        });
+    } else {
+        $('.col-sm-3').each(function( index ) {
+            $( this ).show();
+            var matches = $( this ).attr('application-name').toLowerCase().match(applicationNamePattern.toLowerCase())
+            if (!matches) {
+                $( this ).hide();
+            }
+        });
+    }
 }
+
+$( document ).ready(function() {
+    $("#applicationNameFilterDiv").keyup(function() {
+        filterApplications($(this).val());
+    });
+});

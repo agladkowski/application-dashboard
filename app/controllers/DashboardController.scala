@@ -22,7 +22,7 @@ object DashboardController extends Controller {
 
   def applicationDivAjax(applicationName: String) = Action.async {
     buildDashboardModel(Option(applicationName)).map { applicationStatus =>
-      Ok(views.html.common.applicationDiv(applicationStatus))
+      Ok(views.html.common.applicationStatusList(applicationStatus))
     }
   }
 
