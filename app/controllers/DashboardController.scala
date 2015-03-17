@@ -1,13 +1,9 @@
 package controllers
 
-import model.DashboardModel.{Environment, _}
+import model.DashboardModel._
 import model._
-import play.Logger
-import play.api.Play.current
-import play.api.cache.Cache
-import play.api.libs.ws.WS
 import play.api.mvc._
-import utils.{RequestUtils, ProcessUtils, RegexUtils}
+import utils.RequestUtils
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -32,7 +28,7 @@ object DashboardController extends Controller {
     }
   }
 
-  def applications = Action.async {
+  def applications = Action.async { implicit request =>
     buildDashboardModel().map { statusList =>
       Ok(views.html.applications(statusList))
     }

@@ -1,13 +1,25 @@
-@(statusList: List[model.DashboardModel.ApplicationStatus])
+@(applicationStatusList: List[model.DashboardModel.ApplicationStatus])(implicit request: play.api.mvc.Request[Any])
 
-@import model.DashboardModel._; val statusDivHeight: String = 20 * statusList.map(_.application.environments.size).max + "px"
+
+@statusDivHeight = @{
+    val divHeight: Int = 20 * applicationStatusList.map(_.application.environments.size).max
+    divHeight + "px"
+}
 
 @appStatusColor(statusInAllEnvironments: List[model.DashboardModel.ApplicationStatus]) = @{
-    if(statusInAllEnvironments.filter(!_.environment.optional).forall(!_.error)){
-        "green"
-    } else {
-        "red"
-    }
+    val allNonOptionalEnvironmentsOk = statusInAllEnvironments.filter(!_.environment.optional).forall(!_.error)
+
+    if(allNonOptionalEnvironmentsOk)
+        "panel-green"
+    else
+        "panel-red"
+}
+
+@currentApplicationFilter = @{
+    if (request.getQueryString("filter").isDefined)
+        request.getQueryString("filter").get
+    else
+        ""
 }
 
 @main("Dashboard - Applications") {
@@ -16,29 +28,30 @@
             <div class="col-lg-12">
                 <h1 class="page-header">
                     Applications
-                    <input id="applicationNameFilterDiv" class="form-control filter" placeholder="Filter app name" autofocus >
+                    <input id="applicationNameFilterDiv" class="form-control filter" placeholder="Filter app name" autofocus value="@currentApplicationFilter">
                 </h1>
             </div>
 
-            @statusList.groupBy(_.application.name).toSeq.sortBy(_._1).map {
+            @applicationStatusList.groupBy(_.application.name).toSeq.sortBy(_._1).map {
                 case (applicationName, statusInAllEnvironments) => {
-                <div class="col-sm-3" application-name="@applicationName">
-                    <div class="panel panel-@appStatusColor(statusInAllEnvironments)" >
-                        <div class="panel-heading" style="overflow: hidden;">
-                            <h3 class="panel-title">@applicationName
-                                <i class="fa fa-arrow-circle-right fa-lg cursor-pointer" onclick="location.href='/applications/@applicationName'"></i>
-                                <i class="fa fa-refresh fa-lg cursor-pointer" onclick="loadApplicationStatusDiv('@applicationName');" style="float: right;"></i>
-                            </h3>
+                    <div class="col-sm-3" application-name="@applicationName">
+                        <div class="panel @appStatusColor(statusInAllEnvironments)" >
+                            <div class="panel-heading" style="overflow: hidden;">
+                                <h3 class="panel-title">
+                                    @applicationName
+                                    <i class="fa fa-arrow-circle-right fa-lg cursor-pointer" onclick="location.href='/applications/@applicationName'"></i>
+                                    <i class="fa fa-refresh fa-lg cursor-pointer" onclick="loadApplicationStatusDiv('@applicationName');" style="float: right;"></i>
+                                </h3>
 
-                        </div>
-                        <div class="panel-body">
+                            </div>
+                            <div class="panel-body">
 
-                            <div id="@applicationName-status-div" style="height: @statusDivHeight; overflow: hidden;">
-                                @common.applicationStatusList(statusInAllEnvironments)
+                                <div id="@applicationName-status-div" style="height: @statusDivHeight; overflow: hidden;">
+                                    @common.applicationStatusList(statusInAllEnvironments)
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
                 }
             }
 

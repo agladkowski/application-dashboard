@@ -1,6 +1,25 @@
 @(applicationStatusList: List[model.DashboardModel.ApplicationStatus])
 
-@import model.DashboardModel._ ;  val statusDivHeight: String = 20 + 20 * applicationStatusList.groupBy(_.environment.name).map(_._2.size).max + "px"
+@import model.DashboardModel._ ;
+
+@statusDivHeight = @{
+    val divHeight: Int = 20 * applicationStatusList
+            .groupBy(applicationStatus => applicationStatus.environment.name)
+            .map {case (environmentName, applicationStatusList) => applicationStatusList.size}
+            .max
+    (20 + divHeight) + "px"
+}
+
+@appStatusColor(statusInAllEnvironments: List[model.DashboardModel.ApplicationStatus]) = @{
+    val allNonOptionalAppsInEnvironmentOk = statusInAllEnvironments
+            .filter(applicationStatus => !applicationStatus.environment.optional)
+            .forall(applicationStatus => !applicationStatus.error)
+
+    if(allNonOptionalAppsInEnvironmentOk)
+        "panel-green"
+    else
+        "panel-red"
+}
 
 @main("Dashboard - Environments") {
     <div class="container-fluid">
@@ -11,27 +30,30 @@
 
             @applicationStatusList.groupBy(_.environment.name).map {
                 case (environmentName, statusInAllEnvironments) => {
-                <div class="col-sm-4">
-                    <div class="panel panel-@if(statusInAllEnvironments.forall(!_.error)){green}else{red}">
-                        <div class="panel-heading" onclick="location.href='/environments/@environmentName'" style="cursor: pointer;">
-                            <h3 class="panel-title">@environmentName <i class="fa fa-arrow-circle-right fa-lg"></i></h3>
-                        </div>
-                        <div class="panel-body">
-                            <div style="height: @statusDivHeight; overflow: hidden;">
-                                <table>
-                                @statusInAllEnvironments.map { status: ApplicationStatus =>
-                                    <tr>
-                                      <td>@common.applicationStatusIcon(status)</td>
-                                      <td><a href="@status.environment.statusPageUrl">@status.application.name</a></td>
-                                      <td>&nbsp;</td>
-                                      <td><span class="badge">@status.version</span></td>
-                                    </tr>
-                                }
-                                </table>
+                    <div class="col-sm-4">
+                        <div class="panel @appStatusColor(statusInAllEnvironments)">
+                            <div class="panel-heading" onclick="location.href='/environments/@environmentName'" style="cursor: pointer;">
+                                <h3 class="panel-title">
+                                    @environmentName
+                                    <i class="fa fa-arrow-circle-right fa-lg"></i>
+                                </h3>
+                            </div>
+                            <div class="panel-body">
+                                <div style="height: @statusDivHeight; overflow: hidden;">
+                                    <table>
+                                    @statusInAllEnvironments.map { status: ApplicationStatus =>
+                                        <tr>
+                                          <td>@common.applicationStatusIcon(status)</td>
+                                          <td><a href="@status.environment.statusPageUrl">@status.application.name</a></td>
+                                          <td>&nbsp;</td>
+                                          <td><span class="badge">@status.version</span></td>
+                                        </tr>
+                                    }
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
                 }
             }
 

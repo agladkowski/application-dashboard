@@ -9,7 +9,9 @@ function filterApplications(applicationNamePattern) {
         $('.col-sm-3').each(function( index ) {
             $( this ).show();
         });
+        updateUrl("")
     } else {
+        updateUrl("?filter=" + applicationNamePattern)
         $('.col-sm-3').each(function( index ) {
             $( this ).show();
             var matches = $( this ).attr('application-name').toLowerCase().match(applicationNamePattern.toLowerCase())
@@ -20,8 +22,30 @@ function filterApplications(applicationNamePattern) {
     }
 }
 
+function updateUrl(filterParameter) {
+    if (window.history) {
+        window.history.pushState(null, "Applications", "/applications" + filterParameter)
+    }
+}
+
+function GetURLParameter(sParam) {
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++)
+    {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam)
+        {
+            return sParameterName[1];
+        }
+    }
+}
+
+
 $( document ).ready(function() {
-    $("#applicationNameFilterDiv").keyup(function() {
+    // initialize application name filter input field
+    $("#applicationNameFilterDiv").keyup(function(e) {
         filterApplications($(this).val());
     });
+    filterApplications(GetURLParameter("filter"));
 });
