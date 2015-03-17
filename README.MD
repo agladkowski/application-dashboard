@@ -57,7 +57,7 @@ Back-end (scala)
 
 Roadmap
 ==
-- Refresh individual application/environment views (refresh icon)
+- Record application version changes and present in a form of a timeline
 - Load all the application/environment views asynchronously in the HTML UI
-- Add view filters
+- Refresh individual environment view (refresh icon)
 - Improve config wizard
