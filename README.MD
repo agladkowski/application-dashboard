@@ -7,7 +7,7 @@ Screenshots
 ===
 ![dashboard-applications-view2](https://cloud.githubusercontent.com/assets/1870012/6679293/a439b824-cc3d-11e4-9618-aa9e976f6438.PNG)
 
-![dashboard-application-view](https://cloud.githubusercontent.com/assets/1870012/6340264/7a83e5d8-bbb5-11e4-9305-8c722f40f95f.PNG)
+![dashbord-config-builder](https://cloud.githubusercontent.com/assets/1870012/6679337/18fbdcbe-cc3e-11e4-8302-3b07eca36616.PNG)
 
 ![dashboard-configuration](https://cloud.githubusercontent.com/assets/1870012/6340342/545905c2-bbb6-11e4-882d-10f92364d881.PNG)
 
