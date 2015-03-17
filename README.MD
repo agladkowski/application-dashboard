@@ -11,6 +11,8 @@ Screenshots
 
 ![dashboard-configuration](https://cloud.githubusercontent.com/assets/1870012/6340342/545905c2-bbb6-11e4-882d-10f92364d881.PNG)
 
+![dashboard-config-history](https://cloud.githubusercontent.com/assets/1870012/6679382/c9cb3882-cc3e-11e4-9917-2c55726f0a60.PNG)
+
 
 Requirements
 ===
