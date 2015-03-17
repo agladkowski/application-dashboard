@@ -5,7 +5,7 @@ This app should be deployed on the intranet where security policy usually allows
 
 Screenshots
 ===
-![dashboard-applications-view](https://cloud.githubusercontent.com/assets/1870012/6340218/1376fa24-bbb5-11e4-97d1-0eff607fa93a.PNG)
+![dashboard-applications-view2](https://cloud.githubusercontent.com/assets/1870012/6679293/a439b824-cc3d-11e4-9618-aa9e976f6438.PNG)
 
 ![dashboard-application-view](https://cloud.githubusercontent.com/assets/1870012/6340264/7a83e5d8-bbb5-11e4-9305-8c722f40f95f.PNG)
 
