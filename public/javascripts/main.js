@@ -43,9 +43,11 @@ function GetURLParameter(sParam) {
 
 
 $( document ).ready(function() {
-    // initialize application name filter input field
-    $("#applicationNameFilterDiv").keyup(function(e) {
-        filterApplications($(this).val());
-    });
-    filterApplications(GetURLParameter("filter"));
+    if ( $( "#applicationNameFilterDiv" ).length ) {
+        $("#applicationNameFilterDiv").keyup(function(e) {
+            filterApplications($(this).val());
+        });
+        filterApplications(GetURLParameter("filter"));
+    }
+
 });
