@@ -1,5 +1,6 @@
 package controllers
 
+import config.DashboardHistory
 import model.DashboardModel._
 import model._
 import play.api.mvc._
@@ -38,6 +39,10 @@ object DashboardController extends Controller {
     buildDashboardModel().map { statusList =>
       Ok(views.html.environments(statusList))
     }
+  }
+
+  def history = Action {
+    Ok(views.html.history(DashboardHistory.versionHistory))
   }
 
   def buildDashboardModel(applicationName: Option[String] = None, environmentName: Option[String] = None): Future[List[ApplicationStatus]] = {

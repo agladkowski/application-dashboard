@@ -8,7 +8,7 @@ import play.api.Play
 import play.api.Play.current
 import utils.FileUtils
 
-import scala.io.{BufferedSource, Source}
+import scala.io.{Source}
 
 /**
  * Created by andrzej on 22/02/2015.

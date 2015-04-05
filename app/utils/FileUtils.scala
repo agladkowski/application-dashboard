@@ -28,7 +28,7 @@ object FileUtils {
   
   def listFiles(directory: String): Array[File] = {
     val dir = new File(directory)
-    if (dir.exists()) dir.listFiles()
+    if (dir.exists()) dir.listFiles().filter(f => f.isFile)
     else Array.empty
   }
 }
