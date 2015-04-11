@@ -41,8 +41,10 @@ object DashboardController extends Controller {
     }
   }
 
-  def history = Action {
-    Ok(views.html.history(DashboardHistory.versionHistory))
+  def history = historyFilter(7)
+
+  def historyFilter(numberOfDays: Int = 7) = Action {
+    Ok(views.html.history(DashboardHistory.versionHistory(numberOfDays), numberOfDays))
   }
 
   def buildDashboardModel(applicationName: Option[String] = None, environmentName: Option[String] = None): Future[List[ApplicationStatus]] = {

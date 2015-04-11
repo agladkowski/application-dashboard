@@ -29,7 +29,7 @@ object Global extends GlobalSettings {
     val dashboardHistoryUpdateActor = Akka.system.actorOf(Props(new DashboardHistoryUpdateActor()), name = "dashboardHistoryUpdateActor")
     Akka.system.scheduler.schedule(
       Duration.create(0, TimeUnit.MILLISECONDS),
-//      Duration.create(30, TimeUnit.SECONDS),
+      //Duration.create(30, TimeUnit.SECONDS),
       Duration.create(5, TimeUnit.MINUTES),
       dashboardHistoryUpdateActor,
       "update"

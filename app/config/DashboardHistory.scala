@@ -33,7 +33,7 @@ object DashboardHistory {
       } else {
         val lastRecordedVersionFile: File = versionHistoryFiles.sortBy(_.getName).last
         val latestRecordedVersion: String = getLatestRecordedVersion(lastRecordedVersionFile)._2
-        val versionHasChanged: Boolean = !status.version.getOrElse("").contains(latestRecordedVersion)
+        val versionHasChanged: Boolean = status.version.isDefined && !status.version.getOrElse("").contains(latestRecordedVersion)
         if (versionHasChanged) {
           Logger.debug(s"Version changed ${status.environment.name}/${status.application.name} current ${status.version} latest ${latestRecordedVersion}")
           recordVersionChange(status, deploymentHistoryDir)
@@ -46,6 +46,9 @@ object DashboardHistory {
     val dateAndVersionTuple: Array[String] = file.getName.split("__")
     val dateStr: String = dateAndVersionTuple(0)
     val date = dateFormatter.parseDateTime(dateStr)
+    if (dateAndVersionTuple.length == 1) {
+      return (date, "???")
+    }
     val version: String = dateAndVersionTuple(1)
     (date, version)
   }
@@ -53,10 +56,12 @@ object DashboardHistory {
   def recordVersionChange(status: ApplicationStatus, deploymentHistoryDir: String): Unit = {
     val currentDate: String = new DateTime().toString(dateFormatString)
     val historyFileName = s"${deploymentHistoryDir}/${currentDate}__${status.version.getOrElse("")}"
-    FileUtils.createNewFile(historyFileName)
+    if (status.version.isDefined) {
+      FileUtils.createNewFile(historyFileName)
+    }
   }
 
-  def versionHistory:Array[VersionHistory] = {
+  def versionHistory(numberOfDays: Int):Array[VersionHistory] = {
     val idGenerator = new AtomicInteger()
     val applications: Array[File] = new File(getHistoryHomeDir).listFiles().filter(_.isDirectory)
     val historyList: Array[VersionHistory] = applications.map { application: File =>
@@ -70,9 +75,12 @@ object DashboardHistory {
       }.flatten
     }.flatten
 
-    Logger.info("versionHistory size = " + historyList.length)
+    val dateFilter: DateTime = new DateTime().minusDays(numberOfDays)
+    val historyToReturn: Array[VersionHistory] = historyList.filter(_.date.isAfter(dateFilter))
 
-    historyList
+    Logger.info("versionHistory size = " + historyToReturn.length)
+
+    historyToReturn
   }
 
 }

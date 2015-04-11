@@ -1,4 +1,4 @@
-@(history: Array[config.DashboardHistory.VersionHistory])
+@(history: Array[config.DashboardHistory.VersionHistory], numberOfDays: Int)
 
 @main("Dashboard - History") {
     <div class="container-fluid">
@@ -6,6 +6,13 @@
             <div class="col-lg-12">
                 <h1 class="page-header">
                     Version history
+                    <div class="historyFilter">
+                        [@if(numberOfDays == 1){1 day}else{<a href="/history/1">1 day</a>}]
+                        [@if(numberOfDays == 2){2 days}else{<a href="/history/2">2 days</a>}]
+                        [@if(numberOfDays == 7){1 week}else{<a href="/history/7">1 week</a>}]
+                        [@if(numberOfDays == 14){2 weeks}else{<a href="/history/14">2 weeks</a>}]
+                        [@if(numberOfDays > 14){All}else{<a href="/history/30">all</a>}]
+                    </div>
                 </h1>
             </div>
 

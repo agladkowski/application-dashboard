@@ -10,6 +10,7 @@ GET         /applications/:applicationName/ajax                controllers.Dashb
 GET         /applications/:applicationName                     controllers.DashboardController.application(applicationName: String)
 GET         /environments/:environmentName                     controllers.DashboardController.environment(environmentName: String)
 GET         /history                                           controllers.DashboardController.history
+GET         /history/:numberOfDays                             controllers.DashboardController.historyFilter(numberOfDays: Int)
 GET         /status/:appName/:versionParamName/:version        controllers.TestStatusPagesController.status(appName: String, versionParamName: String, version: String)
 GET         /status/timeout                                    controllers.TestStatusPagesController.timeout
 GET         /status/forbidden                                  controllers.TestStatusPagesController.forbidden
