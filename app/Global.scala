@@ -1,16 +1,13 @@
-import java.io.File
 import java.util.concurrent.TimeUnit
 
 import akka.actor.{Actor, Props}
-import config.{DashboardHistory, DashboardConfig}
+import config.DashboardHistory
 import controllers.DashboardController
 import model.DashboardModel.ApplicationStatus
-import org.joda.time.DateTime
-import play.{Logger, api}
 import play.api.GlobalSettings
 import play.api.Play.current
 import play.api.libs.concurrent.Akka
-import utils.FileUtils
+import play.{Logger, api}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

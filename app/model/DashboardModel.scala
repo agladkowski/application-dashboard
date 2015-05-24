@@ -20,6 +20,7 @@ object DashboardModel {
     val error: Boolean = statusPageResponse.errorMessage.isDefined
     val forbidden: Boolean = HttpResponseStatus.FORBIDDEN.getCode == statusPageResponse.httpStatus
     val timeout: Boolean = HttpResponseStatus.REQUEST_TIMEOUT.getCode == statusPageResponse.httpStatus
+    val isVersionDefined: Boolean = !error && version.isDefined && !version.getOrElse("").startsWith("Invalid") && !version.getOrElse("").isEmpty
   }
 
   case class WebPageResponse(content: String, httpStatus: Int, errorMessage: Option[String])
