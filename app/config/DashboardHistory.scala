@@ -26,30 +26,34 @@ object DashboardHistory {
   def recordHistory(status: ApplicationStatus): Unit = {
     val deploymentHistoryDir: String = s"${getHistoryHomeDir}/${status.application.name}/${status.environment.name}"
     if (status.isVersionDefined) {
-      val versionHistoryFiles: Array[File] = FileUtils.listFiles(deploymentHistoryDir)
+      val versionHistoryFiles: Array[File] = FileUtils.listFiles(deploymentHistoryDir).filter(getLatestRecordedVersion(_).isDefined)
 
       if (versionHistoryFiles.length == 0) {
+        Logger.debug(s"Version of ${status.application.name}/${status.environment.name} changed to ${status.version.get}")
         recordVersionChange(status, deploymentHistoryDir)
       } else {
         val lastRecordedVersionFile: File = versionHistoryFiles.sortBy(_.getName).last
-        val latestRecordedVersion: Option[String] = getLatestRecordedVersion(lastRecordedVersionFile)._2
-        val versionHasChanged: Boolean = !status.version.getOrElse("").contains(latestRecordedVersion.getOrElse(""))
+        val latestRecordedVersion: Option[RecordedVersion] = getLatestRecordedVersion(lastRecordedVersionFile)
+        val versionHasChanged: Boolean = latestRecordedVersion.isDefined &&  !latestRecordedVersion.get.version.contains(status.version.getOrElse(""))
         if (versionHasChanged) {
-          Logger.debug(s"Version changed ${status.environment.name}/${status.application.name} current ${status.version} latest ${latestRecordedVersion}")
+          Logger.debug(s"Version of ${status.application.name}/${status.environment.name} changed from ${latestRecordedVersion.get.version} to ${status.version.get}")
           recordVersionChange(status, deploymentHistoryDir)
         }
       }
     }
   }
-  
-  def getLatestRecordedVersion(file: File): (DateTime, Option[String]) = {
+
+  case class RecordedVersion(file: File, version: String, date: DateTime)
+
+  def getLatestRecordedVersion(file: File): Option[RecordedVersion] = {
     val dateAndVersionTuple: Array[String] = file.getName.split("__")
     val date = dateFormatter.parseDateTime(dateAndVersionTuple(0))
-    if (dateAndVersionTuple.length == 1) {
-      return (date, None)
+    if (dateAndVersionTuple.length == 2) {
+      val version: String = dateAndVersionTuple(1)
+      return Some(RecordedVersion(file, version, date))
     }
-    val version: String = dateAndVersionTuple(1)
-    (date, Some(version))
+
+    None
   }
 
   def recordVersionChange(status: ApplicationStatus, deploymentHistoryDir: String): Unit = {
@@ -67,10 +71,14 @@ object DashboardHistory {
     val historyList: Array[VersionHistory] = applications.map { application: File =>
       val environments: Array[File] = new File(getHistoryHomeDir + "/" + application.getName).listFiles().filter(_.isDirectory)
       environments.map{ environment: File =>
-        val versions: Array[File] = new File(getHistoryHomeDir + "/" + application.getName + "/" + environment.getName).listFiles().filter(_.isFile)
+        val versions: Array[File] = new File(getHistoryHomeDir + "/" + application.getName + "/" + environment.getName)
+          .listFiles()
+          .filter(_.isFile)
+          .filter(getLatestRecordedVersion(_) != None) // file contains valid [date]__[version] information
+
         versions.map{versionFile: File =>
-          val latestRecordedVersion: (DateTime, Option[String]) = getLatestRecordedVersion(versionFile)
-          new VersionHistory(idGenerator.getAndIncrement, application.getName, environment.getName, latestRecordedVersion._2.get, latestRecordedVersion._1)
+          val latestRecordedVersion: Option[RecordedVersion] = getLatestRecordedVersion(versionFile)
+          new VersionHistory(idGenerator.getAndIncrement, application.getName, environment.getName, latestRecordedVersion.get.version, latestRecordedVersion.get.date)
         }
       }.flatten
     }.flatten
