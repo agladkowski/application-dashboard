@@ -55,6 +55,8 @@ UI (HTML/Css/JavaSctipt)
     - http://ironsummitmedia.github.io/startbootstrap-sb-admin-2
 - Awesome fonts
     - http://fortawesome.github.io/Font-Awesome/icons/
+- Ace (Code Editor)
+    - http://ace.c9.io/#nav=about
 
 Back-end (scala)
 - Play framework

@@ -1,6 +1,14 @@
 @(dashboardConfig: config.DashboardConfig.Config)
 
 @main("Dashboard - configuration") {
+
+    <style type="text/css" media="screen">
+        #editor {
+            width: 100%;
+            height: 500px;
+        }
+    </style>
+
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
@@ -8,16 +16,32 @@
             </div>
 
             <div class="col-sm-12">
+
                 @helper.form(action = routes.DashboardAdminController.updateCurrentConfig, 'enctype -> "multipart/form-data") {
                     <div class="form-group">
                         <button type="submit" class="btn btn-success" style="margin-bottom: 10px; float: right;">Update configuration</button>
                         <p class="form-control-static"><b>Current config: </b><span style="color: red;">@dashboardConfig.dashboardJsonLocation</span></p>
-                        <textarea class="form-control" rows="30" cols="20" name="configFile">@dashboardConfig.dashboardJson</textarea>
+                        <input type="hidden" id="configFile" name="configFile" value="" />
+                        <div id="editor">@dashboardConfig.dashboardJson</div>
                     </div>
-
                 }
+
             </div>
 
         </div>
     </div>
+
+
+    @* Initializing editor window *@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.9/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.9/mode-json.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+        var editor = ace.edit("editor");
+        editor.setTheme("ace/theme/monokai");
+        editor.getSession().setMode("ace/mode/json");
+        editor.resize();
+        editor.getSession().on('change', function(e) {
+            document.getElementById("configFile").value = editor.getValue();
+        });
+    </script>
 }
