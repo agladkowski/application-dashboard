@@ -6,14 +6,33 @@
             <div class="col-lg-12">
                 <h1 class="page-header">
                     Version history
-                    <div class="historyFilter">
-                        [@if(numberOfDays == 1){1 day}else{<a href="/history/1">1 day</a>}]
-                        [@if(numberOfDays == 2){2 days}else{<a href="/history/2">2 days</a>}]
-                        [@if(numberOfDays == 7){1 week}else{<a href="/history/7">1 week</a>}]
-                        [@if(numberOfDays == 14){2 weeks}else{<a href="/history/14">2 weeks</a>}]
-                        [@if(numberOfDays > 14){All}else{<a href="/history/30">all</a>}]
-                    </div>
+
                 </h1>
+            </div>
+
+            <div class="col-lg-12">
+                <div class="historyFilter">
+                    [@if(numberOfDays == 1){1 day}else{<a href="/history/1">1 day</a>}]
+                    [@if(numberOfDays == 2){2 days}else{<a href="/history/2">2 days</a>}]
+                    [@if(numberOfDays == 7){1 week}else{<a href="/history/7">1 week</a>}]
+                    [@if(numberOfDays == 14){2 weeks}else{<a href="/history/14">2 weeks</a>}]
+                    [@if(numberOfDays > 14){All}else{<a href="/history/30">all</a>}]
+                    &nbsp;
+                </div>
+                <div class="historyFilter">
+                    @history.groupBy(_.environment).toSeq.sortBy(_._1).map {
+                        case (environment, versionsHistoryInEnv) => {
+                            <label for="environmentFilter@environment"><input type="checkbox" class="environmentFilter" id="environmentFilter@environment" value="@environment" checked="checked" />@environment</label>
+                        }
+                    }
+                </div>
+                <div class="historyFilter">
+                @history.groupBy(_.applicationName).toSeq.sortBy(_._1).map {
+                    case (applicationName, versionsHistoryInEnv) => {
+                        <label for="applicationFilter@applicationName"><input type="checkbox" class="applicationFilter" id="applicationFilter@applicationName" value="@applicationName" checked="checked" />@applicationName</label>
+                    }
+                }
+                </div>
             </div>
 
             <style>
@@ -23,23 +42,22 @@
                     height: 300px;
                 }
                 #historyContainer .vis.timeline .item.selected {
-                    /*border-color: #428bca;*/
                     background-color: lightyellow;
                 }
                 #historyContainer .vis.timeline .item {
-                    /*border-color: darkgreen;*/
                     background-color: lightgreen;
-                    /*color: white;*/
                 }
             </style>
 
-            <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
-            <script src="http://visjs.org/dist/vis.js"></script>
-            <link href="http://visjs.org/dist/vis.css" rel="stylesheet" type="text/css" />
 
             <div class="col-sm-12">
                 <div id="historyContainer"></div>
             </div>
+
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.4.0/vis.css" rel="stylesheet" type="text/css" />
+            <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+            <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+            <script src="//cdnjs.cloudflare.com/ajax/libs/vis/4.4.0/vis.js"></script>
 
             <script>
                 var groups = new vis.DataSet ( );
@@ -48,7 +66,7 @@
                     case (environment, versionsHistoryInEnv) => {
                         groups.add({id: '@environment', content: "@environment"});
                         @versionsHistoryInEnv.map { event =>
-                            var item = {id : '@event.id', group : '@environment', content : '@event.applicationName (@event.version)', start : moment("@event.eventDate" ), type : 'box'}
+                            var item = {id : '@event.id', appName: '@event.applicationName', group : '@environment', content : '@event.applicationName (@event.version)', start : moment("@event.eventDate" ), type : 'box'}
                             items.add ( item ) ;
                         }
                     }
@@ -58,11 +76,44 @@
                 var options = {
                     groupOrder : 'content' // groupOrder can be a property name or a sorting function
                 } ;
-
                 var timeline = new vis.Timeline ( container ) ;
                 timeline.setOptions ( options ) ;
                 timeline.setGroups ( groups ) ;
                 timeline.setItems ( items ) ;
+
+                // timeline filtering
+
+               function filterEnvironmentNames(environmentNames) {
+                   var filteredGroups = new vis.DataSet ( );
+                   groups.forEach(function(group) {
+                        if (_.contains(environmentNames, group.id)) {
+                            filteredGroups.add(group)
+                        }
+                   });
+                   timeline.setGroups(filteredGroups);
+               }
+
+              function filterApplicationNames(applicationNames) {
+                   var filteredItems = new vis.DataSet ( );
+                   items.forEach(function(application) {
+                        if (_.contains(applicationNames, application.appName)) {
+                            filteredItems.add(application)
+                        }
+                   });
+                   timeline.setItems(filteredItems);
+               }
+
+                // initialize checkbox filter listeners
+                window.onload = function () {
+                    $("input[type='checkbox']").change(function() {
+                        var environmentNames = _.map($("input[class='environmentFilter']:checked"), function(checkbox){return checkbox.value});
+                        filterEnvironmentNames(environmentNames);
+                    });
+                    $("input[type='checkbox']").change(function() {
+                        var applicationNames = _.map($("input[class='applicationFilter']:checked"), function(checkbox){return checkbox.value});
+                        filterApplicationNames(applicationNames);
+                    })
+                }
 
             </script>
 

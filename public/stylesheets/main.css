@@ -16,7 +16,12 @@
 }
 
 .historyFilter {
-    display: inline !important;
-    font-size: 16px;
-    float: right !important;
+    /*display: inline !important;*/
+    font-size: 15px;
+    /*float: right !important;*/
+    padding-bottom: 10px !important;
+}
+
+.historyFilter label {
+    font-weight: normal;
 }
