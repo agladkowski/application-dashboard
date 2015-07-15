@@ -4,10 +4,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">
-                    Version history
-
-                </h1>
+                <h1 class="page-header">Version history</h1>
             </div>
 
             <div class="col-lg-12">
@@ -27,11 +24,11 @@
                     }
                 </div>
                 <div class="historyFilter">
-                @history.groupBy(_.applicationName).toSeq.sortBy(_._1).map {
-                    case (applicationName, versionsHistoryInEnv) => {
-                        <label for="applicationFilter@applicationName"><input type="checkbox" class="applicationFilter" id="applicationFilter@applicationName" value="@applicationName" checked="checked" />@applicationName</label>
+                    @history.groupBy(_.applicationName).toSeq.sortBy(_._1).map {
+                        case (applicationName, versionsHistoryInEnv) => {
+                            <label for="applicationFilter@applicationName"><input type="checkbox" class="applicationFilter" id="applicationFilter@applicationName" value="@applicationName" />@applicationName</label>
+                        }
                     }
-                }
                 </div>
             </div>
 
@@ -60,29 +57,33 @@
             <script src="//cdnjs.cloudflare.com/ajax/libs/vis/4.4.0/vis.js"></script>
 
             <script>
-                var groups = new vis.DataSet ( );
-                var items = new vis.DataSet ( ) ;
+                var groups = new vis.DataSet();
+                var items = new vis.DataSet();
+
                 @history.groupBy(_.environment).toSeq.sortBy(_._1).map {
                     case (environment, versionsHistoryInEnv) => {
                         groups.add({id: '@environment', content: "@environment"});
                         @versionsHistoryInEnv.map { event =>
-                            var item = {id : '@event.id', appName: '@event.applicationName', group : '@environment', content : '@event.applicationName (@event.version)', start : moment("@event.eventDate" ), type : 'box'}
-                            items.add ( item ) ;
+                        var item = {id : '@event.id', appName: '@event.applicationName', group : '@environment', content : '@event.applicationName (@event.version)', start : moment("@event.eventDate" ), type : 'box'}
+                        items.add ( item ) ;
                         }
                     }
                 }
 
                 var container = document.getElementById ( 'historyContainer' ) ;
+                var now = moment().minutes(0).seconds(0).milliseconds(0);
                 var options = {
-                    groupOrder : 'content' // groupOrder can be a property name or a sorting function
+                    groupOrder : 'content',
+                    start: now.clone().add(-@numberOfDays, 'days'),
+                    end: now.clone().add(4, 'hours')
+                    //zoomMin: 1000 * 60,          // a minute
+                    //zoomMax: 1000 * 60 * 60 * 24 * 30 * 3  // three months
                 } ;
                 var timeline = new vis.Timeline ( container ) ;
                 timeline.setOptions ( options ) ;
                 timeline.setGroups ( groups ) ;
-                timeline.setItems ( items ) ;
 
                 // timeline filtering
-
                function filterEnvironmentNames(environmentNames) {
                    var filteredGroups = new vis.DataSet ( );
                    groups.forEach(function(group) {
