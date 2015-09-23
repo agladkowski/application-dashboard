@@ -4,7 +4,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">Version history</h1>
+                <h1 class="page-header">Deployment history</h1>
             </div>
 
             <div class="col-lg-12">
@@ -19,7 +19,7 @@
                 <div class="historyFilter">
                     @history.groupBy(_.environment).toSeq.sortBy(_._1).map {
                         case (environment, versionsHistoryInEnv) => {
-                            <label for="environmentFilter@environment"><input type="checkbox" class="environmentFilter" id="environmentFilter@environment" value="@environment" checked="checked" />@environment</label>
+                            <label for="environmentFilter@environment"><input type="checkbox" class="environmentFilter" id="environmentFilter@environment" value="@environment"  />@environment</label>
                         }
                     }
                 </div>
