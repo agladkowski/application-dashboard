@@ -32,7 +32,7 @@ object DashboardHistory {
         Logger.debug(s"Version of ${status.application.name}/${status.environment.name} changed to ${status.version.get}")
         recordVersionChange(status, deploymentHistoryDir)
       } else {
-        val lastRecordedVersionFile: File = versionHistoryFiles.sortBy(_.getName).last
+        val lastRecordedVersionFile: File = versionHistoryFiles.sortBy(_.lastModified()).last
         val latestRecordedVersion: Option[RecordedVersion] = getLatestRecordedVersion(lastRecordedVersionFile)
         val versionHasChanged: Boolean = latestRecordedVersion.isDefined &&  !latestRecordedVersion.get.version.contains(status.version.getOrElse(""))
         if (versionHasChanged) {

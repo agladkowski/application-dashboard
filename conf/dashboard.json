@@ -79,6 +79,11 @@
           "statusPageUrl": "http://localhost:9000/status/forbidden"
         },
         {
+          "name": "perf",
+          "optional": "true",
+          "statusPageUrl": "http://localhost2:9000/status/Service4/service4.version/1.0.1"
+        },
+        {
           "name": "prod",
           "statusPageUrl": "http://localhost:9000/status/Service4/service4.version/1.0.0"
         }

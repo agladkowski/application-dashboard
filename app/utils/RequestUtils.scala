@@ -1,5 +1,7 @@
 package utils
 
+import java.net.ConnectException
+
 import model.DashboardModel.{Application, ApplicationStatus, Environment, WebPageResponse}
 import org.jboss.netty.handler.codec.http.HttpResponseStatus
 import org.slf4j
@@ -47,11 +49,14 @@ object RequestUtils {
         }
       }.recoverWith {
         case t: TimeoutException =>
-          logger.error(s"${url} - ${t.getMessage}", t)
-          Future.successful(WebPageResponse("", HttpResponseStatus.REQUEST_TIMEOUT.getCode, Option(t.getMessage)))
+          logger.error(s"TimeoutException ${url} - ${t.getMessage}")
+          Future.successful(WebPageResponse("", HttpResponseStatus.REQUEST_TIMEOUT.getCode, Some(t.getMessage)))
+        case t: ConnectException =>
+          logger.error(s"ConnectException ${url} - ${t.getMessage}")
+          Future.successful(WebPageResponse("", HttpResponseStatus.SERVICE_UNAVAILABLE.getCode, Some(t.getMessage)))
         case t: Throwable =>
-          logger.error(s"${url} - ${t.getMessage}", t)
-          Future.successful(WebPageResponse("", -1, Option(t.getMessage)))
+          logger.error(s"Throwable ${url} - ${t.getMessage}", t)
+          Future.successful(WebPageResponse("", -1, Some(t.getMessage)))
       }
     }
   }
