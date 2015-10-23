@@ -1,0 +1,91 @@
+@import service.DowntimeHistoryService
+@(history: Array[DowntimeHistoryService.DowntimeHistory], numberOfDays: Int)
+
+@main("Dashboard - History") {
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Deployment history</h1>
+            </div>
+
+            <div class="col-lg-12">
+                <div class="historyFilter">
+                    [@if(numberOfDays == 1){1 day}else{<a href="/history/1">1 day</a>}]
+                    [@if(numberOfDays == 2){2 days}else{<a href="/history/2">2 days</a>}]
+                    [@if(numberOfDays == 7){1 week}else{<a href="/history/7">1 week</a>}]
+                    [@if(numberOfDays == 14){2 weeks}else{<a href="/history/14">2 weeks</a>}]
+                    [@if(numberOfDays > 14){All}else{<a href="/history/30">all</a>}]
+                    &nbsp;
+                </div>
+                <div class="historyFilter">
+                    @history.groupBy(_.environment).toSeq.sortBy(_._1).map {
+                        case (environment, versionsHistoryInEnv) => {
+                            <label for="environmentFilter@environment"><input type="checkbox" class="environmentFilter" id="environmentFilter@environment" value="@environment"  />@environment</label>
+                        }
+                    }
+                </div>
+                <div class="historyFilter">
+                    @history.groupBy(_.applicationName).toSeq.sortBy(_._1).map {
+                        case (applicationName, versionsHistoryInEnv) => {
+                            <label for="applicationFilter@applicationName"><input type="checkbox" class="applicationFilter" id="applicationFilter@applicationName" value="@applicationName" />@applicationName</label>
+                        }
+                    }
+                </div>
+            </div>
+            Development in progress...
+            <style>
+                #historyContainer {
+                    box-sizing: border-box;
+                    width: 100%;
+                    height: 300px;
+                }
+                #historyContainer .vis.timeline .item.selected {
+                    background-color: lightyellow;
+                }
+                #historyContainer .vis.timeline .item {
+                    background-color: lightgreen;
+                }
+            </style>
+
+
+            <div class="col-sm-12">
+                <div id="timelineContainer"></div>
+            </div>
+
+            <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+            <script type="text/javascript">
+              google.load("visualization", "1", {packages:["timeline"]});
+              google.setOnLoadCallback(drawChart);
+
+              function drawChart() {
+                var container = document.getElementById('timelineContainer');
+                var chart = new google.visualization.Timeline(container);
+                var dataTable = new google.visualization.DataTable();
+
+                dataTable.addColumn({ type: 'string', id: 'President' });
+                dataTable.addColumn({ type: 'date', id: 'Start' });
+                dataTable.addColumn({ type: 'date', id: 'End' });
+                dataTable.addRows([
+                  [ 'Service1', new Date(1789, 3, 30), new Date(1797, 2, 4) ],
+                  [ 'Service2', new Date(1797, 2, 4),  new Date(1801, 2, 4) ],
+                  [ 'Service3', new Date(1801, 2, 4),  new Date(1809, 2, 4) ]]);
+
+                var options = {
+                    //timeline: { colorByRowLabel: true }
+                    timeline: { singleColor: '#f00' }
+                };
+
+                chart.draw(dataTable, options);
+              }
+            </script>
+            <script>
+                @history.groupBy(_.environment).toSeq.sortBy(_._1).map {
+                    case (environment, versionsHistoryInEnv) => {
+                        //groups.add({id: '@environment', content: "@environment"});
+                    }
+                }
+            </script>
+
+        </div>
+    </div>
+}

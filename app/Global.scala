@@ -1,13 +1,13 @@
 import java.util.concurrent.TimeUnit
 
 import akka.actor.{Actor, Props}
-import config.DashboardHistory
 import controllers.DashboardController
 import model.DashboardModel.ApplicationStatus
 import play.api.GlobalSettings
 import play.api.Play.current
 import play.api.libs.concurrent.Akka
 import play.{Logger, api}
+import service.VersionHistoryService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -26,7 +26,7 @@ object Global extends GlobalSettings {
     val dashboardHistoryUpdateActor = Akka.system.actorOf(Props(new DashboardHistoryUpdateActor()), name = "dashboardHistoryUpdateActor")
     Akka.system.scheduler.schedule(
       Duration.create(0, TimeUnit.MILLISECONDS),
-      //Duration.create(30, TimeUnit.SECONDS),
+      //Duration.create(10, TimeUnit.SECONDS),
       Duration.create(5, TimeUnit.MINUTES),
       dashboardHistoryUpdateActor,
       "update"
@@ -40,7 +40,7 @@ object Global extends GlobalSettings {
         val dashboardStatus: Future[List[ApplicationStatus]] = DashboardController.buildDashboardModel()
         dashboardStatus.map {statusList: List[ApplicationStatus] =>
           statusList.map { status: ApplicationStatus =>
-            DashboardHistory.recordHistory(status)
+            VersionHistoryService.recordHistory(status)
           }
         }
         // https://developers.google.com/chart/interactive/docs/gallery/timeline

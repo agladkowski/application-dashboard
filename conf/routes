@@ -11,6 +11,8 @@ GET         /applications/:applicationName                     controllers.Dashb
 GET         /environments/:environmentName                     controllers.DashboardController.environment(environmentName: String)
 GET         /history                                           controllers.DashboardController.history
 GET         /history/:numberOfDays                             controllers.DashboardController.historyFilter(numberOfDays: Int)
+GET         /downtimeHistory                                   controllers.DashboardController.downtimeHistory
+GET         /downtimeHistory/:numberOfDays                     controllers.DashboardController.downtimeHistoryFilter(numberOfDays: Int)
 GET         /status/:appName/:versionParamName/:version        controllers.TestStatusPagesController.status(appName: String, versionParamName: String, version: String)
 GET         /status/timeout                                    controllers.TestStatusPagesController.timeout
 GET         /status/forbidden                                  controllers.TestStatusPagesController.forbidden

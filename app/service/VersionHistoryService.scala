@@ -1,18 +1,19 @@
-package config
+package service
 
 import java.io.File
 import java.util.concurrent.atomic.AtomicInteger
 
+import config.DashboardConfig
 import model.DashboardModel.ApplicationStatus
 import org.joda.time.DateTime
-import org.joda.time.format.{DateTimeFormatter, DateTimeFormat}
+import org.joda.time.format.{DateTimeFormat, DateTimeFormatter}
 import play.Logger
 import utils.FileUtils
 
 /**
  * Created by andrzej on 01/04/2015.
  */
-object DashboardHistory {
+object VersionHistoryService {
   val dateFormatString: String = "yyyy-MM-dd_hh.mm.ss.sss"
 
   val dateFormatter: DateTimeFormatter = DateTimeFormat.forPattern(dateFormatString)

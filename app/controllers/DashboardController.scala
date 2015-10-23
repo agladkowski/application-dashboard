@@ -1,9 +1,9 @@
 package controllers
 
-import config.DashboardHistory
 import model.DashboardModel._
 import model._
 import play.api.mvc._
+import service.{DowntimeHistoryService, VersionHistoryService}
 import utils.RequestUtils
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -44,7 +44,13 @@ object DashboardController extends Controller {
   def history = historyFilter(7)
 
   def historyFilter(numberOfDays: Int = 7) = Action {
-    Ok(views.html.history(DashboardHistory.versionHistory(numberOfDays), numberOfDays))
+    Ok(views.html.history(VersionHistoryService.versionHistory(numberOfDays), numberOfDays))
+  }
+
+  def downtimeHistory = downtimeHistoryFilter(7)
+
+  def downtimeHistoryFilter(numberOfDays: Int = 7) = Action {
+    Ok(views.html.downtimeHistory(new Array[DowntimeHistoryService.DowntimeHistory](0), numberOfDays))
   }
 
   def buildDashboardModel(applicationName: Option[String] = None, environmentName: Option[String] = None): Future[List[ApplicationStatus]] = {

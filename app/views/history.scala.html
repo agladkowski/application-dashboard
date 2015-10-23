@@ -1,4 +1,5 @@
-@(history: Array[config.DashboardHistory.VersionHistory], numberOfDays: Int)
+@import service.VersionHistoryService
+@(history: Array[VersionHistoryService.VersionHistory], numberOfDays: Int)
 
 @main("Dashboard - History") {
     <div class="container-fluid">
