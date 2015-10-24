@@ -4,7 +4,7 @@ version := "1.0"
 
 lazy val `dashboard` = (project in file(".")).enablePlugins(PlayScala)
 
-scalaVersion := "2.11.1"
+scalaVersion := "2.11.2"
 
 libraryDependencies ++= Seq( cache , ws, json )
 
