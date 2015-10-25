@@ -1,4 +1,6 @@
-Application Dashboard (v1.0)
+https://api.travis-ci.org/agladkowski/application-dashboard.svg
+
+Application Dashboard (v1.0) 
 ===
 Application Dashboard allows you to view status and version of all your applications in all the pre-prod and production environments.
 This app should be deployed on the intranet where security policy usually allows for accessing application 'status' pages. 

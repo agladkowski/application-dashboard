@@ -2,6 +2,8 @@ name := "dashboard"
 
 version := "1.0"
 
+logLevel := Level.Info
+
 lazy val `dashboard` = (project in file(".")).enablePlugins(PlayScala)
 
 scalaVersion := "2.11.2"
