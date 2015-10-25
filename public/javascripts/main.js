@@ -23,7 +23,7 @@ function filterApplications(applicationNamePattern) {
 }
 
 function updateUrl(filterParameter) {
-    if (window.history) {
+    if (window.history && window.history.pushState) {
         window.history.pushState(null, "Applications", "/applications" + filterParameter)
     }
 }

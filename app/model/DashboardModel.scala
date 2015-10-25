@@ -25,8 +25,8 @@ object DashboardModel {
 
   case class WebPageResponse(content: String, httpStatus: Int, errorMessage: Option[String])
 
-  def create(): Dashboard = {
-    new Gson().fromJson(DashboardConfig.get().dashboardJson, classOf[Dashboard])
+  def create(jsonContent: String = DashboardConfig.get().dashboardJson): Dashboard = {
+    new Gson().fromJson(jsonContent, classOf[Dashboard])
   }
 
   lazy val instance: Dashboard = create()

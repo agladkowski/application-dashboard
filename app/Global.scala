@@ -36,7 +36,7 @@ object Global extends GlobalSettings {
   class DashboardHistoryUpdateActor extends Actor {
     def receive = {
       case msg: String =>
-        Logger.info(s"Updating dashboard history")
+        Logger.info(s"Refreshing application status...")
         val dashboardStatus: Future[List[ApplicationStatus]] = DashboardController.buildDashboardModel()
         dashboardStatus.map {statusList: List[ApplicationStatus] =>
           statusList.map { status: ApplicationStatus =>

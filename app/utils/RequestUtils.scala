@@ -20,7 +20,7 @@ import scala.concurrent.{Future, TimeoutException}
 object RequestUtils {
   val defaultStatusPageRequestTimeout: Int = 2000 // IN MILLIS
   val defaultStatusPageCacheInSeconds: Int = 20 // IN SECONDS
-  val logger: slf4j.Logger = LoggerFactory.getLogger(RequestUtils.getClass)
+  val logger: slf4j.Logger = LoggerFactory.getLogger("RequestUtils")
 
   def buildApplicationStatusPage(application: Application, environment: Environment): Future[ApplicationStatus] = {
     val webPageContentFuture: Future[WebPageResponse] = RequestUtils.getUrlContent(environment.statusPageUrl)
@@ -34,7 +34,7 @@ object RequestUtils {
   def getUrlContent(url: String): Future[WebPageResponse] = {
     val statusPageCacheInSeconds: Int = Play.configuration.getInt("status.cache.seconds").getOrElse(defaultStatusPageCacheInSeconds)
     val statusPageRequestTimeoutMillis: Int = Play.configuration.getInt("status.request.timeout.millis").getOrElse(defaultStatusPageRequestTimeout)
-    logger.info(s"Loading ${url} timeout=${statusPageRequestTimeoutMillis}ms cache=${statusPageCacheInSeconds}sec")
+    logger.debug(s"Loading ${url} timeout=${statusPageRequestTimeoutMillis}ms cache=${statusPageCacheInSeconds}sec")
 
     Cache.getOrElse[Future[WebPageResponse]](url, statusPageCacheInSeconds) {
       WS.url(url).withHeaders(buildRequestHeaders).withRequestTimeout(statusPageRequestTimeoutMillis).get().map { response =>

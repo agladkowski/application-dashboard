@@ -24,7 +24,7 @@ class DashboardControllerSpec extends Specification {
 
       status(applicationsPaage) must equalTo(OK)
       contentType(applicationsPaage) must beSome.which(_ == "text/html")
-      contentAsString(applicationsPaage) must contain ("<h1 class=\"page-header\">Applications</h1>")
+      contentAsString(applicationsPaage) must contain ("Dashboard - Applications")
     }
 
     "render the application (Service1) page" in new WithApplication{
@@ -32,7 +32,7 @@ class DashboardControllerSpec extends Specification {
 
       status(service1Page) must equalTo(OK)
       contentType(service1Page) must beSome.which(_ == "text/html")
-      contentAsString(service1Page) must contain ("<h1 class=\"page-header\">Applications / (Service1)</h1>")
+      contentAsString(service1Page) must contain ("Applications / (Service1)")
     }
 
     "render the environments page" in new WithApplication{
@@ -40,7 +40,7 @@ class DashboardControllerSpec extends Specification {
 
       status(environmentsPage) must equalTo(OK)
       contentType(environmentsPage) must beSome.which(_ == "text/html")
-      contentAsString(environmentsPage) must contain ("<h1 class=\"page-header\">Environments</h1>")
+      contentAsString(environmentsPage) must contain ("Environments")
     }
 
     "render the environment (int) page" in new WithApplication{
@@ -48,7 +48,7 @@ class DashboardControllerSpec extends Specification {
 
       status(intEnvironmentPage) must equalTo(OK)
       contentType(intEnvironmentPage) must beSome.which(_ == "text/html")
-      contentAsString(intEnvironmentPage) must contain ("<h1 class=\"page-header\">Environments / (int)</h1>")
+      contentAsString(intEnvironmentPage) must contain ("Environments / (int)")
     }
   }
 }
