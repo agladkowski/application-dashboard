@@ -25,7 +25,7 @@ Java 7
 
 Building the app
 ===
-$./activator dist
+$./activator clean test dist
 
 Running the app locally
 ===
