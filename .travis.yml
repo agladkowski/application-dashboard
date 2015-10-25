@@ -1,7 +1,4 @@
 language: scala
 scala:
-  - 2.11.1
-before_script:
- - chmod +x activator
-script:
-  - ./activator dist
+  - 2.11.5
+script: sbt test
