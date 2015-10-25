@@ -1,4 +1,4 @@
-https://api.travis-ci.org/agladkowski/application-dashboard.svg
+![](https://api.travis-ci.org/agladkowski/application-dashboard.svg)
 
 Application Dashboard (v1.0) 
 ===
