@@ -1,6 +1,7 @@
 language: scala
 scala:
   - 2.11.1
+before_script:
+ - chmod +x activator
 script:
-  - chmod +x activator
   - ./activator dist
