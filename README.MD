@@ -66,7 +66,9 @@ Back-end (scala)
 
 Roadmap
 ==
-- Record application version changes and present in a form of a timeline
+Version 1.1
+- Record app version changes and present on a timeline view
+- Record app downtimes and present on a timeline view
 - Load all the application/environment views asynchronously in the HTML UI
 - Refresh individual environment view (refresh icon)
 - Improve config wizard
