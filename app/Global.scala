@@ -7,7 +7,7 @@ import play.api.GlobalSettings
 import play.api.Play.current
 import play.api.libs.concurrent.Akka
 import play.{Logger, api}
-import service.VersionHistoryService
+import service.{DowntimeHistoryService, VersionHistoryService}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -41,6 +41,7 @@ object Global extends GlobalSettings {
         dashboardStatus.map {statusList: List[ApplicationStatus] =>
           statusList.map { status: ApplicationStatus =>
             VersionHistoryService.recordHistory(status)
+            DowntimeHistoryService.recordDowntime(status)
           }
         }
         // https://developers.google.com/chart/interactive/docs/gallery/timeline
