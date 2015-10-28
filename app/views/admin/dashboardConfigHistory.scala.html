@@ -1,3 +1,4 @@
+@import config.DateConstants
 @(dashboardConfigHistory: Array[config.DashboardConfig.ConfigHistoryItem])
 
 @main("Dashboard - configuration") {
@@ -23,7 +24,7 @@
                         @dashboardConfigHistory.toSeq.sortBy(_.lastModified.getMillis).reverse.map { configHistoryItem =>
                             <tr>
                                 <td>@configHistoryItem.name</td>
-                                <td>@configHistoryItem.lastModified.toString("yyyy-MM-dd hh:mm:ss")</td>
+                                <td>@configHistoryItem.lastModified.toString(DateConstants.uiDateFormatString)</td>
                                 <td>
                                     <a class="btn btn-success btn-xs" href="/admin/config/@configHistoryItem.name/view">View</a>
                                     @if(!configHistoryItem.isCurrent){

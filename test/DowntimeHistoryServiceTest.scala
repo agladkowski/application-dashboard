@@ -1,5 +1,6 @@
 import java.io.File
 
+import config.DateConstants
 import model.DashboardModel.{Application, ApplicationStatus, Environment, WebPageResponse}
 import org.joda.time.DateTime
 import org.junit.Assert.{assertFalse, assertTrue}
@@ -56,7 +57,7 @@ class DowntimeHistoryServiceTest {
     assertTrue("Expecting downtime file to be created", new File(expectedDowntimeFile).exists())
 
     val downtimeFileContent: String = FileUtils.readFile(new File(expectedDowntimeFile))
-    val downtimeStart: DateTime = DowntimeHistoryService.dateFormatter.parseDateTime(downtimeFileContent)
+    val downtimeStart: DateTime = DateConstants.dateFormatter.parseDateTime(downtimeFileContent)
     assertTrue(downtimeStart.isBefore(new DateTime()))
   }
 

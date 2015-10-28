@@ -3,10 +3,9 @@ package service
 import java.io.File
 import java.util.concurrent.atomic.AtomicInteger
 
-import config.DashboardConfig
+import config.{DateConstants, DashboardConfig}
 import model.DashboardModel.ApplicationStatus
 import org.joda.time.DateTime
-import org.joda.time.format.{DateTimeFormat, DateTimeFormatter}
 import play.Logger
 import utils.FileUtils
 
@@ -14,14 +13,10 @@ import utils.FileUtils
  * Created by andrzej on 01/04/2015.
  */
 object VersionHistoryService {
-  val dateFormatString: String = "yyyy-MM-dd_hh.mm.ss.sss"
-
-  val dateFormatter: DateTimeFormatter = DateTimeFormat.forPattern(dateFormatString)
-
   val getHistoryHomeDir = s"${DashboardConfig.getDashboardHome}history/versions"
 
   case class VersionHistory(id: Int, applicationName: String, environment: String, version: String, date: DateTime) {
-    def eventDate = date.toString("yyyy-MM-dd hh:mm:ss")
+    def eventDate = date.toString(config.DateConstants.uiDateFormatString)
   }
 
   def recordHistory(status: ApplicationStatus): Unit = {
@@ -48,7 +43,7 @@ object VersionHistoryService {
 
   def getLatestRecordedVersion(file: File): Option[RecordedVersion] = {
     val dateAndVersionTuple: Array[String] = file.getName.split("__")
-    val date = dateFormatter.parseDateTime(dateAndVersionTuple(0))
+    val date = DateConstants.dateFormatter.parseDateTime(dateAndVersionTuple(0))
     if (dateAndVersionTuple.length == 2) {
       val version: String = dateAndVersionTuple(1)
       return Some(RecordedVersion(file, version, date))
@@ -61,7 +56,7 @@ object VersionHistoryService {
     if (!status.isVersionDefined) {
       return // do not record any error statuses
     }
-    val currentDate: String = new DateTime().toString(dateFormatString)
+    val currentDate: String = new DateTime().toString(DateConstants.dateFormatString)
     val historyFileName = s"${deploymentHistoryDir}/${currentDate}__${status.version.getOrElse("")}"
     FileUtils.createNewFile(historyFileName)
   }

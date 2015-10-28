@@ -113,7 +113,7 @@ object DashboardConfig {
   }
 
   private def generateArchiveFileName: String = {
-    val currentDate = new DateTime().toString("yyyy-MM-dd_hh.mm.ss.sss")
+    val currentDate = new DateTime().toString(DateConstants.dateFormatString)
     s"$getDashboardHome$defaultDashboardConfigName.$currentDate"
   }
 

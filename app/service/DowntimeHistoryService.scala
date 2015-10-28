@@ -2,7 +2,7 @@ package service
 
 import java.io.File
 
-import config.DashboardConfig
+import config.{DateConstants, DashboardConfig}
 import model.DashboardModel.ApplicationStatus
 import org.joda.time.format.{DateTimeFormat, DateTimeFormatter}
 import org.joda.time.{DateTime, Days}
@@ -19,12 +19,8 @@ import utils.FileUtils
 object DowntimeHistoryService {
    val logger: slf4j.Logger = LoggerFactory.getLogger("DowntimeHistoryService")
 
-   val dateFormatString: String = "yyyy-MM-dd_hh.mm.ss.sss"
-
-   val dateFormatter: DateTimeFormatter = DateTimeFormat.forPattern(dateFormatString)
-
    case class DowntimeHistory(id: Int = 0, applicationName: String, environment: String, date: DateTime) {
-     def eventDate = date.toString("yyyy-MM-dd hh:mm:ss")
+     def eventDate = date.toString(DateConstants.uiDateFormatString)
    }
 
   case class ApplicationDowntime(applicationName: String, environment: String, downtimeStart: DateTime, downtimeEnd: Option[DateTime]){
@@ -34,7 +30,7 @@ object DowntimeHistoryService {
       if (downtimeEnd.isEmpty) {
         throw new IllegalStateException("downtimeEnd not defined!")
       }
-      downtimeStart.toString(dateFormatString) + "__" + downtimeEnd.get.toString(dateFormatString)
+      downtimeStart.toString(DateConstants.dateFormatString) + "__" + downtimeEnd.get.toString(DateConstants.dateFormatString)
     }
   }
 
@@ -43,7 +39,7 @@ object DowntimeHistoryService {
 
      if (status.isVersionDefined && downtimeFile.exists) {// end of downtime
        val downtimeStartStr: String = FileUtils.readFile(downtimeFile)
-       val downtimeStart = dateFormatter.parseDateTime(downtimeStartStr)
+       val downtimeStart = DateConstants.dateFormatter.parseDateTime(downtimeStartStr)
        val downtimeEnd: Some[DateTime] = Some(new DateTime())
        val downtime: ApplicationDowntime = new ApplicationDowntime(status.application.name, status.environment.name, downtimeStart, downtimeEnd)
 
@@ -56,7 +52,7 @@ object DowntimeHistoryService {
 
      if (!status.isVersionDefined && !downtimeFile.exists) {// downtime start
        val downtimeStart: DateTime = new DateTime()
-       val downtimeStartStr: String = downtimeStart.toString(dateFormatString)
+       val downtimeStartStr: String = downtimeStart.toString(DateConstants.dateFormatString)
 
        FileUtils.createNewFile(downtimeFile, downtimeStartStr)// creating downtime file with current date
 
@@ -66,7 +62,7 @@ object DowntimeHistoryService {
 
      if (!status.isVersionDefined && downtimeFile.exists) {// downtime in progress
        val downtimeStartStr: String = FileUtils.readFile(downtimeFile)
-       val downtimeStart = dateFormatter.parseDateTime(downtimeStartStr)
+       val downtimeStart = DateConstants.dateFormatter.parseDateTime(downtimeStartStr)
        return Some(new ApplicationDowntime(status.application.name, status.environment.name, downtimeStart, None))
      }
 
