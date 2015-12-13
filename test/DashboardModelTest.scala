@@ -3,7 +3,7 @@ import model.DashboardModel._
 import org.junit.Assert._
 import org.junit.Test
 
-class DashboardConfigTest {
+class DashboardModelTest {
 
   @Test
   def loadDashboardConfiguration(): Unit = {
@@ -15,6 +15,8 @@ class DashboardConfigTest {
     val dashboard = DashboardModel.create(jsonContent)
 
     // assert
+    assertEquals("1.1", dashboard.version)
+
     val projects: List[Application] = dashboard.applications.toList
     assertEquals(5, projects.size)
 
@@ -28,6 +30,15 @@ class DashboardConfigTest {
     val environment = environments.head
     assertEquals("int", environment.name)
     assertEquals("http://localhost:9000/status/Service1/version/3.0.0-SNAPSHOT", environment.statusPageUrl)
+    assertEquals("http://localhost:9000", environment.baseUrl)
+
+    val links = project.links
+    assertEquals(7, links.size)
+
+    val link = links.head;
+    assertEquals("Endpoints", link.title);
+    assertEquals("/service1/endpoints", link.href);
+    assertEquals(true, link.isRelative);
   }
 
 }

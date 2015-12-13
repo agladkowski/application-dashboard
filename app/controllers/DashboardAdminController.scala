@@ -83,8 +83,8 @@ object DashboardAdminController extends Controller {
       )
     } else {
       val env = Environment("test", statusPageUrl)
-      val application = Application("TestApp", statusPageVersionRegex, "", Array(env))
-      val dashboard = Dashboard(Array(application))
+      val application = Application(name="TestApp", statusPageVersionRegex=statusPageVersionRegex, hostRegex="", environments=Array(env), links=Array(Link("Endpoints", "/service/endpoints")))
+      val dashboard = Dashboard(applications = Array(application))
       val dashboardJsonConfig: String = new GsonBuilder().setPrettyPrinting().create().toJson(dashboard)
       val applicationStatusFuture: Future[ApplicationStatus] = RequestUtils.buildApplicationStatusPage(application, env)
       applicationStatusFuture.map { applicationStatus =>

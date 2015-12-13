@@ -33,7 +33,7 @@ class DowntimeHistoryServiceTest {
   }
 
   def createApplicationStatus(version: Option[String]): ApplicationStatus = {
-    val application: Application = Application(APPLICATION_NAME, "statusPageRegex", "histRegex", null)
+    val application: Application = Application(name=APPLICATION_NAME, statusPageVersionRegex="statusPageRegex", hostRegex="hostRegex",environments=null)
     val environment: Environment = Environment(ENVIRONMENT_NAME, STATUS_PAGE_URL, true)
     val statusPageResponse: WebPageResponse = WebPageResponse("Status page content...", 200, None)
     val host: Some[String] = Some(APPLICATION_HOST)

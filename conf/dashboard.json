@@ -1,45 +1,35 @@
 {
+  "version":"1.1",
   "applications": [
     {
       "name": "Service1",
       "statusPageVersionRegex": "\"version\"\\:\"([0-9\\.\\-_A-Z]*)\"",
       "hostRegex": "(localhost)",
       "environments": [
-        {
-          "name": "int",
-          "statusPageUrl": "http://localhost:9000/status/Service1/version/3.0.0-SNAPSHOT"
-        },
-        {
-          "name": "stage",
-          "statusPageUrl": "http://localhost:9000/status/Service1/version/2.0.0"
-        },
-        {
-          "name": "prod",
-          "statusPageUrl": "http://localhost:9000/status/Service1/version/1.0.0"
-        }
-      ]
+        {"name": "int",    "statusPageUrl": "http://localhost:9000/status/Service1/version/3.0.0-SNAPSHOT"},
+        {"name": "stage",  "statusPageUrl": "http://localhost:9000/status/Service1/version/2.0.0"         },
+        {"name": "prod",   "statusPageUrl": "http://localhost:9000/status/Service1/version/1.0.0"         }
+      ],
+      "links":
+        [
+          {"title":"Endpoints", "href":"/service1/endpoints"},
+          {"title":"Metrics",   "href":"/service1/metrics"},
+          {"title":"Cache",     "href":"/service1/cache"},
+          {"title":"Logs",      "href":"/service1/logs"},
+          {"title":"Jira",      "href":"http://jira.org/service1"},
+          {"title":"Bamboo",    "href":"http://bamboo.org/service1"},
+          {"title":"Wiki",      "href":"http://wiki.org/service1"}
+        ]
     },
 
     {
       "name": "Service2",
       "statusPageVersionRegex": "\"service2.version\"\\:\"([0-9\\.\\-_A-Z]*)\"",
       "environments": [
-        {
-          "name": "int",
-          "statusPageUrl": "http://localhost:9000/status/Service2/service2.version/1.2-SNAPSHOT"
-        },
-        {
-          "name": "test",
-          "statusPageUrl": "http://localhost:9000/status/Service2/service2.version/1.1"
-        },
-        {
-          "name": "stage",
-          "statusPageUrl": "http://localhost:9000/status/Service2/service2.version/1.1"
-        },
-        {
-          "name": "prod",
-          "statusPageUrl": "http://localhost:9000/status/Service2/service2.version/1.0"
-        }
+        {"name": "int",   "statusPageUrl": "http://localhost:9000/status/Service2/service2.version/1.2-SNAPSHOT"},
+        {"name": "test",  "statusPageUrl": "http://localhost:9000/status/Service2/service2.version/1.1"         },
+        {"name": "stage", "statusPageUrl": "http://localhost:9000/status/Service2/service2.version/1.1"         },
+        {"name": "prod",  "statusPageUrl": "http://localhost:9000/status/Service2/service2.version/1.0"         }
       ]
     },
 
@@ -47,18 +37,9 @@
       "name": "Service3",
       "statusPageVersionRegex": "\"service3.version\"\\:\"([0-9\\.\\-_A-Z]*)\"",
       "environments": [
-        {
-          "name": "int",
-          "statusPageUrl": "http://localhost:9000/status/page/404"
-        },
-        {
-          "name": "stage",
-          "statusPageUrl": "http://localhost:9000/status/Service3/service3.version/12.0"
-        },
-        {
-          "name": "prod",
-          "statusPageUrl": "http://localhost:9000/status/Service3/service3.version/11.0"
-        }
+        {"name": "int",   "statusPageUrl": "http://localhost:9000/status/page/404"                      },
+        {"name": "stage", "statusPageUrl": "http://localhost:9000/status/Service3/service3.version/12.0"},
+        {"name": "prod",  "statusPageUrl": "http://localhost:9000/status/Service3/service3.version/11.0"}
       ]
     },
 
@@ -66,27 +47,11 @@
       "name": "Service4",
       "statusPageVersionRegex": "\"service4.version\"\\:\"([0-9\\.\\-_A-Z]*)\"",
       "environments": [
-        {
-          "name": "int",
-          "statusPageUrl": "http://localhost:9000/some/really/really/really/long/path/to/status/page"
-        },
-        {
-          "name": "test",
-          "statusPageUrl": "http://localhost:9000/status/timeout"
-        },
-        {
-          "name": "stage",
-          "statusPageUrl": "http://localhost:9000/status/forbidden"
-        },
-        {
-          "name": "perf",
-          "optional": "true",
-          "statusPageUrl": "http://localhost2:9000/status/Service4/service4.version/1.0.1"
-        },
-        {
-          "name": "prod",
-          "statusPageUrl": "http://localhost:9000/status/Service4/service4.version/1.0.0"
-        }
+        {"name": "int",   "statusPageUrl": "http://localhost:9000/some/really/really/really/long/path/to/status/page"         },
+        {"name": "test",  "statusPageUrl": "http://localhost:9000/status/timeout"                                             },
+        {"name": "stage", "statusPageUrl": "http://localhost:9000/status/forbidden"                                           },
+        {"name": "perf",  "statusPageUrl": "http://localhost2:9000/status/Service4/service4.version/1.0.1", "optional": "true"},
+        {"name": "prod",  "statusPageUrl": "http://localhost:9000/status/Service4/service4.version/1.0.0"                     }
       ]
     },
 
@@ -94,31 +59,12 @@
       "name": "Service5",
       "statusPageVersionRegex": "\"service5.version\"\\:\"([0-9\\.\\-_A-Z]*)\"",
       "environments": [
-        {
-          "name": "dev",
-          "statusPageUrl": "http://localhost:9000/status/Service5/service5.version/8.0-SNAPSHOT"
-        },
-        {
-          "name": "int",
-          "statusPageUrl": "http://localhost:9000/status/Service5/service5.version/7.0"
-        },
-        {
-          "name": "test",
-          "statusPageUrl": "http://localhost:9000/status/Service5/service5.version/7.0"
-        },
-        {
-          "name": "perf",
-          "statusPageUrl": "http://localhost:9000/status/Service5/xxx",
-          "optional": "true"
-        },
-        {
-          "name": "stage",
-          "statusPageUrl": "http://localhost:9000/status/Service5/service5.version/7.0"
-        },
-        {
-          "name": "prod",
-          "statusPageUrl": "http://localhost:9000/status/Service5/service5.version/6.0"
-        }
+        {"name": "dev",   "statusPageUrl": "http://localhost:9000/status/Service5/service5.version/8.0-SNAPSHOT"},
+        {"name": "int",   "statusPageUrl": "http://localhost:9000/status/Service5/service5.version/7.0"         },
+        {"name": "test",  "statusPageUrl": "http://localhost:9000/status/Service5/service5.version/7.0"         },
+        {"name": "perf",  "statusPageUrl": "http://localhost:9000/status/Service5/xxx", "optional": "true"      },
+        {"name": "stage", "statusPageUrl": "http://localhost:9000/status/Service5/service5.version/7.0"         },
+        {"name": "prod",  "statusPageUrl": "http://localhost:9000/status/Service5/service5.version/6.0"         }
       ]
     }
   ]
