@@ -11,15 +11,27 @@ function filterApplications(applicationNamePattern) {
         });
         updateUrl("")
     } else {
+        var appNameFilter = applicationNamePattern.trim().split(" ");
         updateUrl("?filter=" + applicationNamePattern)
         $('.col-sm-3').each(function( index ) {
             $( this ).show();
-            var matches = $( this ).attr('application-name').toLowerCase().match(applicationNamePattern.toLowerCase())
-            if (!matches) {
+            var hideApp = !showApp(appNameFilter, $( this ).attr('application-name').toLowerCase());
+            if (hideApp) {
                 $( this ).hide();
             }
         });
+
     }
+}
+
+function showApp(appNameFilter, appName) {
+    for(var i = 0;i<appNameFilter.length; i++) {
+        var appFilter = appNameFilter[i];
+        if (appName.match(appFilter.toLowerCase())) {
+            return true;
+        }
+    }
+    return false;
 }
 
 function updateUrl(filterParameter) {
@@ -36,7 +48,7 @@ function GetURLParameter(sParam) {
         var sParameterName = sURLVariables[i].split('=');
         if (sParameterName[0] == sParam)
         {
-            return sParameterName[1];
+            return decodeURIComponent(sParameterName[1]);
         }
     }
 }
