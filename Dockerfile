@@ -8,5 +8,3 @@ WORKDIR /app/
 EXPOSE 9000
 
 ENTRYPOINT ["/app/dashboard/bin/dashboard"]
-
-CMD [""]
