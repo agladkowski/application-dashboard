@@ -37,7 +37,9 @@ object DashboardConfig {
   }
   
   def get(): Config = {
+    logger.info("dashboard.home=" + getDashboardHome)
     loadConfigFromFile(Some(getDashboardHome + defaultDashboardConfigName)).orElse {
+      logger.info("Loading dashboard.config.location=" + Play.configuration.getString("dashboard.config.location"))
       loadConfigFromFile(Play.configuration.getString("dashboard.config.location"))
     }.getOrElse {
       logger.info("Loading default dashboard.json")
