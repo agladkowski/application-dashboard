@@ -33,9 +33,7 @@ object DashboardConfig {
   // ---------------------------------------------------------------------------------
 
   def getDashboardHome: String = {
-    Play.configuration.getString("dashboard.home").getOrElse {
-      defaultDashboardHome
-    }
+    Play.configuration.getString("dashboard.home").getOrElse(defaultDashboardHome)
   }
   
   def get(): Config = {

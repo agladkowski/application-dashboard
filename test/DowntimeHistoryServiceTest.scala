@@ -3,11 +3,11 @@ import java.io.File
 import config.DateConstants
 import model.DashboardModel.{Application, ApplicationStatus, Environment, WebPageResponse}
 import org.joda.time.DateTime
-import org.junit.Assert.{assertFalse, assertTrue}
+import org.junit.Assert.{assertFalse, assertTrue, assertNotNull, assertEquals}
 import org.junit.rules.TemporaryFolder
 import org.junit.{After, Before, Test}
 import service.DowntimeHistoryService
-import service.DowntimeHistoryService.ApplicationDowntime
+import service.DowntimeHistoryService.{ApplicationDowntime}
 import utils.FileUtils
 
 /**
@@ -19,6 +19,7 @@ class DowntimeHistoryServiceTest {
   val ENVIRONMENT_NAME: String = "int"
   val APPLICATION_HOST: String = "service1.com"
   val STATUS_PAGE_URL: String = "http://localhost:9000/status"
+  val NUMBER_OF_DAYS: Int = 7
 
   val tmpFile: TemporaryFolder = new TemporaryFolder()
 
@@ -99,7 +100,7 @@ class DowntimeHistoryServiceTest {
     // assert
     assertTrue("Expecting downtime", applicationDowntime.isDefined)
     assertTrue("Expecting downtime file to exist", new File(expectedDowntimeFile).exists())
-    assertTrue("Expecting downtime in progress", applicationDowntime.get.downtimeEnd.isEmpty)
+    assertTrue("Expecting downtime in progress", applicationDowntime.get.end.isEmpty)
   }
 
   @Test
@@ -117,5 +118,43 @@ class DowntimeHistoryServiceTest {
     // assert
     assertTrue("Expecting no downtime", applicationDowntime.isEmpty)
     assertFalse("Expecting no downtime file", new File(expectedDowntimeFile).exists())
+  }
+
+  @Test
+  def testReadDowntime = {
+    // prepare
+    val applicationDown: ApplicationStatus = createApplicationStatus(None)
+    val applicationUp: ApplicationStatus = createApplicationStatus(Some("1.0.0-SNAPSHOT"))
+    val downtimeHistoryDir: String = tmpFile.getRoot.getAbsolutePath
+
+    // record full downtime duration
+    DowntimeHistoryService.recordDowntime(applicationDown, downtimeHistoryDir)
+    Thread.sleep(100)// simulate service return in 400 milliseconds
+    DowntimeHistoryService.recordDowntime(applicationUp, downtimeHistoryDir)
+
+    // record downtime start
+    DowntimeHistoryService.recordDowntime(applicationDown, downtimeHistoryDir)
+
+    // act
+    val downtimeHistoryList: Array[ApplicationDowntime] = DowntimeHistoryService.downtimeHistory(NUMBER_OF_DAYS, downtimeHistoryDir)
+
+    // assert
+    assertNotNull(downtimeHistoryList)
+    assertEquals(2, downtimeHistoryList.length)
+
+    val downtimeHistory: ApplicationDowntime = downtimeHistoryList(0)
+    assertEquals(0, downtimeHistory.id)
+    assertEquals(APPLICATION_NAME, downtimeHistory.applicationName)
+    assertEquals(ENVIRONMENT_NAME, downtimeHistory.environment)
+    assertNotNull(downtimeHistory.start)
+    assertTrue(downtimeHistory.end.isDefined)
+    assertTrue(downtimeHistory.start.isBefore(downtimeHistory.end.get))
+
+    val downtimeInProgress: ApplicationDowntime = downtimeHistoryList(1)
+    assertEquals(1, downtimeInProgress.id)
+    assertEquals(APPLICATION_NAME, downtimeInProgress.applicationName)
+    assertEquals(ENVIRONMENT_NAME, downtimeInProgress.environment)
+    assertNotNull(downtimeInProgress.start)
+    assertTrue(downtimeInProgress.end.isEmpty)
   }
 }

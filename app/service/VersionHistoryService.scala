@@ -64,20 +64,20 @@ object VersionHistoryService {
   def versionHistory(numberOfDays: Int):Array[VersionHistory] = {
     val idGenerator = new AtomicInteger()
     val applications: Array[File] = new File(getHistoryHomeDir).listFiles().filter(_.isDirectory)
-    val historyList: Array[VersionHistory] = applications.map { application: File =>
-      val environments: Array[File] = new File(getHistoryHomeDir + "/" + application.getName).listFiles().filter(_.isDirectory)
-      environments.map{ environment: File =>
-        val versions: Array[File] = new File(getHistoryHomeDir + "/" + application.getName + "/" + environment.getName)
+    val historyList: Array[VersionHistory] = applications.flatMap { application: File =>
+      val environments: Array[File] = application.listFiles().filter(_.isDirectory)
+      environments.flatMap { environment: File =>
+        val versions: Array[File] = environment
           .listFiles()
           .filter(_.isFile)
           .filter(getLatestRecordedVersion(_) != None) // file contains valid [date]__[version] information
 
-        versions.map{versionFile: File =>
+        versions.map { versionFile: File =>
           val latestRecordedVersion: Option[RecordedVersion] = getLatestRecordedVersion(versionFile)
           new VersionHistory(idGenerator.getAndIncrement, application.getName, environment.getName, latestRecordedVersion.get.version, latestRecordedVersion.get.date)
         }
-      }.flatten
-    }.flatten
+      }
+    }
 
     val dateFilter: DateTime = new DateTime().minusDays(numberOfDays)
     val historyToReturn: Array[VersionHistory] = historyList.filter(_.date.isAfter(dateFilter))

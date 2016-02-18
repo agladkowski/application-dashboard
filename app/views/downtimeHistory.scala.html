@@ -1,20 +1,21 @@
 @import service.DowntimeHistoryService
-@(history: Array[DowntimeHistoryService.DowntimeHistory], numberOfDays: Int)
+@(history: Array[DowntimeHistoryService.ApplicationDowntime], numberOfDays: Int)
 
-@main("Dashboard - History") {
+@main("Dashboard - Downtime history") {
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">Deployment history</h1>
+                <h1 class="page-header">Downtime history</h1>
             </div>
 
             <div class="col-lg-12">
                 <div class="historyFilter">
-                    [@if(numberOfDays == 1){1 day}else{<a href="/history/1">1 day</a>}]
-                    [@if(numberOfDays == 2){2 days}else{<a href="/history/2">2 days</a>}]
-                    [@if(numberOfDays == 7){1 week}else{<a href="/history/7">1 week</a>}]
-                    [@if(numberOfDays == 14){2 weeks}else{<a href="/history/14">2 weeks</a>}]
-                    [@if(numberOfDays > 14){All}else{<a href="/history/30">all</a>}]
+                    [@if(numberOfDays == 1){1 day}else{<a href="/downtimeHistory/1">1 day</a>}]
+                    [@if(numberOfDays == 2){2 days}else{<a href="/downtimeHistory/2">2 days</a>}]
+                    [@if(numberOfDays == 7){1 week}else{<a href="/downtimeHistory/7">1 week</a>}]
+                    [@if(numberOfDays == 14){2 weeks}else{<a href="/downtimeHistory/14">2 weeks</a>}]
+                    [@if(numberOfDays == 30){1 month}else{<a href="/downtimeHistory/30">1 month</a>}]
+                    [@if(numberOfDays == 90){3 months}else{<a href="/downtimeHistory/90">3 months</a>}]
                     &nbsp;
                 </div>
                 <div class="historyFilter">
@@ -32,58 +33,86 @@
                     }
                 </div>
             </div>
-            Development in progress...
+
+
             <style>
-                #historyContainer {
-                    box-sizing: border-box;
-                    width: 100%;
-                    height: 300px;
-                }
-                #historyContainer .vis.timeline .item.selected {
-                    background-color: lightyellow;
-                }
-                #historyContainer .vis.timeline .item {
-                    background-color: lightgreen;
+                div.vis-item,
+                div.vis-item.vis-selected {
+                    background-color: #ff4500;
+                    border-color: red;
+                    color: white;
                 }
             </style>
 
 
             <div class="col-sm-12">
-                <div id="timelineContainer"></div>
+                <div id="historyContainer"></div>
             </div>
 
-            <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-            <script type="text/javascript">
-              google.load("visualization", "1", {packages:["timeline"]});
-              google.setOnLoadCallback(drawChart);
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.4.0/vis.css" rel="stylesheet" type="text/css" />
+            <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+            <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+            <script src="//cdnjs.cloudflare.com/ajax/libs/vis/4.4.0/vis.js"></script>
 
-              function drawChart() {
-                var container = document.getElementById('timelineContainer');
-                var chart = new google.visualization.Timeline(container);
-                var dataTable = new google.visualization.DataTable();
-
-                dataTable.addColumn({ type: 'string', id: 'President' });
-                dataTable.addColumn({ type: 'date', id: 'Start' });
-                dataTable.addColumn({ type: 'date', id: 'End' });
-                dataTable.addRows([
-                  [ 'Service1', new Date(1789, 3, 30), new Date(1797, 2, 4) ],
-                  [ 'Service2', new Date(1797, 2, 4),  new Date(1801, 2, 4) ],
-                  [ 'Service3', new Date(1801, 2, 4),  new Date(1809, 2, 4) ]]);
-
-                var options = {
-                    //timeline: { colorByRowLabel: true }
-                    timeline: { singleColor: '#f00' }
-                };
-
-                chart.draw(dataTable, options);
-              }
-            </script>
             <script>
-                @history.groupBy(_.environment).toSeq.sortBy(_._1).map {
-                    case (environment, versionsHistoryInEnv) => {
-                        //groups.add({id: '@environment', content: "@environment"});
+                    var groups = new vis.DataSet();
+                    var items = new vis.DataSet();
+
+                    @history.groupBy(_.environment).toSeq.sortBy(_._1).map {
+                        case (environment, versionsHistoryInEnv) => {
+                            groups.add({id: '@environment', content: "@environment"});
+                            @versionsHistoryInEnv.map { event =>
+                                var item = {id : '@event.id', appName: '@event.applicationName', group : '@environment', content : '@event.applicationName', start : moment("@event.startDate" ), end : moment("@event.endDate" )}
+                                items.add ( item ) ;
+                            }
+                        }
                     }
-                }
+
+                    var container = document.getElementById ( 'historyContainer' ) ;
+                    var now = moment().minutes(0).seconds(0).milliseconds(0);
+                    var options = {
+                        groupOrder : 'content',
+                        start: now.clone().add(-@numberOfDays, 'days'),
+                        end: now.clone().add(4, 'hours'),
+                        clickToUse: false
+                    } ;
+                    var timeline = new vis.Timeline ( container ) ;
+                    timeline.setOptions ( options ) ;
+                    timeline.setGroups ( groups ) ;
+
+                    // timeline filtering
+                    function filterEnvironmentNames(environmentNames) {
+                        var filteredGroups = new vis.DataSet ( );
+                        groups.forEach(function(group) {
+                            if (_.contains(environmentNames, group.id)) {
+                                filteredGroups.add(group)
+                            }
+                        });
+                        timeline.setGroups(filteredGroups);
+                    }
+
+                    function filterApplicationNames(applicationNames) {
+                        var filteredItems = new vis.DataSet ( );
+                        items.forEach(function(application) {
+                            if (_.contains(applicationNames, application.appName)) {
+                                filteredItems.add(application)
+                            }
+                        });
+                        timeline.setItems(filteredItems);
+                    }
+
+                    // initialize checkbox filter listeners
+                    window.onload = function () {
+                        $("input[type='checkbox']").change(function() {
+                            var environmentNames = _.map($("input[class='environmentFilter']:checked"), function(checkbox){return checkbox.value});
+                            filterEnvironmentNames(environmentNames);
+                        });
+                        $("input[type='checkbox']").change(function() {
+                            var applicationNames = _.map($("input[class='applicationFilter']:checked"), function(checkbox){return checkbox.value});
+                            filterApplicationNames(applicationNames);
+                        })
+                    }
+
             </script>
 
         </div>

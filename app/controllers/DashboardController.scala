@@ -47,10 +47,10 @@ object DashboardController extends Controller {
     Ok(views.html.history(VersionHistoryService.versionHistory(numberOfDays), numberOfDays))
   }
 
-  def downtimeHistory = downtimeHistoryFilter(7)
+  def downtimeHistory = downtimeHistoryFilter(1)
 
-  def downtimeHistoryFilter(numberOfDays: Int = 7) = Action {
-    Ok(views.html.downtimeHistory(new Array[DowntimeHistoryService.DowntimeHistory](0), numberOfDays))
+  def downtimeHistoryFilter(numberOfDays: Int = 1) = Action {
+    Ok(views.html.downtimeHistory(DowntimeHistoryService.downtimeHistory(numberOfDays), numberOfDays))
   }
 
   def buildDashboardModel(applicationName: Option[String] = None, environmentName: Option[String] = None): Future[List[ApplicationStatus]] = {
