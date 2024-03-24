@@ -1,14 +1,11 @@
 package config
 
-import java.io.{File, InputStream}
-
 import org.joda.time.DateTime
 import org.slf4j.LoggerFactory
-import play.api.Play
-import play.api.Play.current
 import utils.FileUtils
 
-import scala.io.{Source}
+import java.io.{File, InputStream}
+import scala.io.Source
 
 /**
  * Created by andrzej on 22/02/2015.
@@ -32,15 +29,20 @@ object DashboardConfig {
 
   // ---------------------------------------------------------------------------------
 
-  def getDashboardHome: String = {
-    Play.configuration.getString("dashboard.home").getOrElse(defaultDashboardHome)
+  def getConfiguration(name: String, defaultValue: String): String = {
+    System.getProperty(name, defaultValue)
   }
-  
+
+  def getDashboardHome: String = {
+    getConfiguration("dashboard.home", defaultDashboardHome)
+  }
+
   def get(): Config = {
     logger.info("dashboard.home=" + getDashboardHome)
     loadConfigFromFile(Some(getDashboardHome + defaultDashboardConfigName)).orElse {
-      logger.info("Loading dashboard.config.location=" + Play.configuration.getString("dashboard.config.location"))
-      loadConfigFromFile(Play.configuration.getString("dashboard.config.location"))
+      val configFile = getConfiguration("dashboard.config.location", null)
+      logger.info("Loading dashboard.config.location=" + getConfiguration("dashboard.config.location", null))
+      loadConfigFromFile(Some(configFile))
     }.getOrElse {
       logger.info("Loading default dashboard.json")
       val inputJsonStream: InputStream = Thread.currentThread().getContextClassLoader.getResourceAsStream(defaultDashboardConfigName)

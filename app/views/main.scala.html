@@ -2,7 +2,7 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,8 +11,11 @@
         <meta name="author" content="Andrzej Gladkowski">
         <title>@title</title>
 
-        <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("css/bootstrap.min.css"))'>
-        <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("css/font-awesome.min.css"))'>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/css/bootstrap.min.css" integrity="sha512-Z/def5z5u2aR89OuzYcxmDJ0Bnd5V1cKqBEbvLOiUNWdg9PQeXVvXLI90SE4QOHGlfLqUnDNVAYyZi8UwUTmWQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+@*        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/fontawesome.min.css" integrity="sha512-SgaqKKxJDQ/tAUAAXzvxZz33rmn7leYDYfBP+YoMRSENhf3zJyx3SBASt/OfeQwBHA1nxMis7mM3EV/oYT6Fdw==" crossorigin="anonymous" referrerpolicy="no-referrer" />*@
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+@*        <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("css/bootstrap.min.css"))'>*@
+@*        <link rel='stylesheet' href='@routes.WebJarAssets.at(WebJarAssets.locate("css/font-awesome.min.css"))'>*@
         <link rel="stylesheet" href="@routes.Assets.at("stylesheets/sb-admin-2.css")">
         <link rel="stylesheet" href="@routes.Assets.at("stylesheets/main.css")">
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
@@ -20,69 +23,130 @@
     </head>
 
     <body>
-        <div id="wrapper">
-            <!-- nav to be cleaned up !!-->
-            <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="/">Dashboard V1.1</a>
-                </div>
+@*        <div id="wrapper">*@
+@*            <!-- nav to be cleaned up !!-->*@
+@*            <nav class="navbar  bg-body-tertiary fixed-top" style="margin-bottom: 0">*@
+@*                <div class="navbar-header">*@
+@*                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">*@
+@*                        <span class="sr-only">Toggle navigation</span>*@
+@*                        <span class="icon-bar"></span>*@
+@*                        <span class="icon-bar"></span>*@
+@*                        <span class="icon-bar"></span>*@
+@*                    </button>*@
+@*                    <a class="navbar-brand" href="/">Dashboard V1.1</a>*@
+@*                </div>*@
 
-                <div class="navbar-default sidebar" role="navigation">
-                        <div class="sidebar-nav navbar-collapse">
-                        <ul class="nav" id="side-menu">
-                            <li class="active">
-                                <a href="/"><i class="fa fa-dashboard fa-fw"></i> Dashboard<span class="fa arrow"></span></a>
-                                <ul class="nav nav-second-level collapse in">
-                                    <li>
-                                        <a href="/applications"><i class="fa fa-th-list fa-fw"></i> Applications</a>
-                                    </li>
-                                    <li>
-                                        <a href="/environments"><i class="fa fa-th-list fa-fw"></i> Environments</a>
-                                    </li>
-                                    <li>
-                                        <a href="/history"><i class="fa fa-history fa-fw"></i>Deployment history</a>
-                                    </li>
-                                    <li>
-                                        <a href="/downtimeHistory"><i class="fa fa-history fa-fw"></i>Downtime history</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="active">
-                                <a href="#"><i class="fa fa-cog fa-fw"></i> Configuration<span class="fa arrow"></span></a>
-                                <ul class="nav nav-second-level collapse">
-                                    <li>
-                                        <a href="/admin/config/current"><i class="fa fa-edit fa-fw"></i>Current config</a>
-                                    </li>
-                                    <li>
-                                        <a href="/admin/config/builder"><i class="fa fa-magic fa-fw"></i>Config builder</a>
-                                    </li>
-                                    <li>
-                                        <a href="/admin/config/history"><i class="fa fa-history fa-fw"></i>Config history</a>
-                                    </li>
-                                </ul>
-                            </li>
+@*                <div class="navbar-default sidebar" role="navigation">*@
+@*                        <div class="sidebar-nav navbar-collapse">*@
+@*                        <ul class="nav" id="side-menu">*@
+@*                            <li class="active">*@
+@*                                <a href="/"><i class="fa fa-dashboard fa-fw"></i> Dashboard<span class="fa arrow"></span></a>*@
+@*                                <ul class="nav nav-second-level collapse in">*@
+@*                                    <li>*@
+@*                                        <a href="/applications"><i class="fa fa-th-list fa-fw"></i> Applications</a>*@
+@*                                    </li>*@
+@*                                    <li>*@
+@*                                        <a href="/environments"><i class="fa fa-th-list fa-fw"></i> Environments</a>*@
+@*                                    </li>*@
+@*                                    <li>*@
+@*                                        <a href="/history"><i class="fa fa-history fa-fw"></i>Deployment history</a>*@
+@*                                    </li>*@
+@*                                    <li>*@
+@*                                        <a href="/downtimeHistory"><i class="fa fa-history fa-fw"></i>Downtime history</a>*@
+@*                                    </li>*@
+@*                                </ul>*@
+@*                            </li>*@
+@*                            <li class="active">*@
+@*                                <a href="#"><i class="fa fa-cog fa-fw"></i> Configuration<span class="fa arrow"></span></a>*@
+@*                                <ul class="nav nav-second-level collapse">*@
+@*                                    <li>*@
+@*                                        <a href="/admin/config/current"><i class="fa fa-edit fa-fw"></i>Current config</a>*@
+@*                                    </li>*@
+@*                                    <li>*@
+@*                                        <a href="/admin/config/builder"><i class="fa fa-magic fa-fw"></i>Config builder</a>*@
+@*                                    </li>*@
+@*                                    <li>*@
+@*                                        <a href="/admin/config/history"><i class="fa fa-history fa-fw"></i>Config history</a>*@
+@*                                    </li>*@
+@*                                </ul>*@
+@*                            </li>*@
 
+@*                        </ul>*@
+@*                    </div>*@
+@*                        <!-- /.sidebar-collapse -->*@
+@*                </div>*@
+@*                    <!-- /.navbar-static-side -->*@
+@*            </nav>*@
+@*            <div id="page-wrapper" style="min-height: 896px;">*@
+
+@*            @content*@
+
+@*            </div>*@
+@*        </div>*@
+
+        <nav class="navbar bg-body-tertiary fixed-top">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Application dashboard v1.2</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Offcanvas</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                            <li class="nav-item">
+                                <b>Dashboard</b>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="/applications">&nbsp;Applications</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="/environments">&nbsp;Environments</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="/history">&nbsp;History</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="/downtimeHistory">&nbsp;Downtime history</a>
+                            </li>
+                            <li class="nav-item">
+                                <b>Admin</b>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="/admin/config/current">&nbsp;Current config</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="/admin/config/builder">&nbsp;Config builder</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="/admin/config/history">&nbsp;Config history</a>
+                            </li>
+@*                            <li class="nav-item dropdown">*@
+@*                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">*@
+@*                                    Dropdown*@
+@*                                </a>*@
+@*                                <ul class="dropdown-menu">*@
+@*                                    <li><a class="dropdown-item" href="#">Action</a></li>*@
+@*                                    <li><a class="dropdown-item" href="#">Another action</a></li>*@
+@*                                    <li>*@
+@*                                        <hr class="dropdown-divider">*@
+@*                                    </li>*@
+@*                                    <li><a class="dropdown-item" href="#">Something else here</a></li>*@
+@*                                </ul>*@
+@*                            </li>*@
                         </ul>
                     </div>
-                        <!-- /.sidebar-collapse -->
                 </div>
-                    <!-- /.navbar-static-side -->
-            </nav>
-            <div id="page-wrapper" style="min-height: 896px;">
-
-            @content
-
             </div>
-        </div>
+        </nav>
 
-        <script src='@routes.WebJarAssets.at(WebJarAssets.locate("jquery.min.js"))'></script>
-        <script src='@routes.WebJarAssets.at(WebJarAssets.locate("js/bootstrap.min.js"))'></script>
+        @content
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/js/bootstrap.min.js" integrity="sha512-fHY2UiQlipUq0dEabSM4s+phmn+bcxSYzXP4vAXItBvBHU7zAM/mkhCZjtBEIJexhOMzZbgFlPLuErlJF2b+0g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="@routes.Assets.at("javascripts/metisMenu.min.js")"></script>
         <script src="@routes.Assets.at("javascripts/raphael-min.js")"></script>
         <script src="@routes.Assets.at("javascripts/sb-admin-2.js")"></script>

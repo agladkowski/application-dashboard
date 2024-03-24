@@ -7,7 +7,7 @@
             .groupBy(applicationStatus => applicationStatus.environment.name)
             .map {case (environmentName, applicationStatusList) => applicationStatusList.size}
             .max
-    (20 + divHeight) + "px"
+    s"${(20 + divHeight)}px"
 }
 
 @appStatusColor(statusInAllEnvironments: List[model.DashboardModel.ApplicationStatus]) = @{
@@ -16,29 +16,40 @@
             .forall(applicationStatus => !applicationStatus.error)
 
     if(allNonOptionalAppsInEnvironmentOk)
-        "panel-green"
+        "border-success"
     else
-        "panel-red"
+        "border-danger"
 }
+
+@appHeaderStatusColor(statusInAllEnvironments: List[model.DashboardModel.ApplicationStatus]) = @{
+    val allNonOptionalAppsInEnvironmentOk = statusInAllEnvironments
+    .filter(applicationStatus => !applicationStatus.environment.optional)
+    .forall(applicationStatus => !applicationStatus.error)
+
+    if(allNonOptionalAppsInEnvironmentOk)
+        "bg-success"
+    else
+        "bg-danger"
+}
+
 
 @main("Dashboard - Environments") {
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-12">
-                <h1 class="page-header">Environments</h1>
+            <div class="col-lg-12" style="padding-top: 60px;">
+                <h3 class="page-header">Environments</h3>
             </div>
 
             @applicationStatusList.groupBy(_.environment.name).map {
                 case (environmentName, statusInAllEnvironments) => {
-                    <div class="col-sm-4">
-                        <div class="panel @appStatusColor(statusInAllEnvironments)">
-                            <div class="panel-heading" onclick="location.href='/environments/@environmentName'" style="cursor: pointer;">
-                                <h3 class="panel-title">
-                                    @environmentName
-                                    <i class="fa fa-arrow-circle-right fa-lg"></i>
-                                </h3>
+                    <div class="col-sm-4" environment-name="@environmentName" style="padding-top: 7px;">
+                        <div class="card @appStatusColor(statusInAllEnvironments)">
+                            <div class="card-header text-white @appHeaderStatusColor(statusInAllEnvironments)"
+                                    onclick="location.href='/environments/@environmentName'" style="cursor: pointer;">
+                                @environmentName
+                                <i class="fa fa-arrow-circle-right fa-lg"></i>
                             </div>
-                            <div class="panel-body">
+                            <div class="card-body text-dark">
                                 <div style="height: @statusDivHeight; overflow: hidden;">
                                     <table>
                                     @statusInAllEnvironments.map { status: ApplicationStatus =>

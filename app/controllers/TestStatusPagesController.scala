@@ -4,8 +4,10 @@ import play.Logger
 import play.api.libs.json._
 import play.api.mvc._
 
+import javax.inject.Inject
 
-object TestStatusPagesController extends Controller {
+
+class TestStatusPagesController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
   def status(appName: String = "AppName", versionParamName: String = "version", version: String = "1.0.0") = Action {
     generateStatusPage(appName, versionParamName, version)
   }

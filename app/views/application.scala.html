@@ -13,12 +13,16 @@
             </div>
 
             @applicationStatusList.map { applicationStatus: ApplicationStatus =>
-            <div class="col-sm-4">
-                <div class="panel panel-@if(applicationStatus.error){red}else{green}">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"> @applicationStatus.environment.name</h3>
+            <div class="col-sm-4" style="padding-top: 7px;">
+                <div class="card border-@if(applicationStatus.error){danger}else{success}">
+                    <div class="card-header text-white bg-@if(applicationStatus.error){danger}else{success}">
+                        @applicationStatus.environment.name
                     </div>
-                    @common.applicationStatusBody(applicationStatus)
+                    <div class="card-body text-dark">
+                        <div class="card-text">
+                            @common.applicationStatusBody(applicationStatus)
+                        </div>
+                    </div>
                 </div>
             </div>
             }

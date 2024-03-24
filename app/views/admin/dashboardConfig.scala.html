@@ -17,7 +17,7 @@
 
             <div class="col-sm-12">
 
-                @helper.form(action = routes.DashboardAdminController.updateCurrentConfig, 'enctype -> "multipart/form-data") {
+                @helper.form(action = routes.DashboardAdminController.updateCurrentConfig, Symbol("enctype")  -> "multipart/form-data") {
                     <div class="form-group">
                         <button type="submit" class="btn btn-success" style="margin-bottom: 10px; float: right;">Update configuration</button>
                         <p class="form-control-static"><b>Current config: </b><span style="color: red;">@dashboardConfig.dashboardJsonLocation</span></p>

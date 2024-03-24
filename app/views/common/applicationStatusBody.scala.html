@@ -1,3 +1,4 @@
+@import model.DashboardModel.AttributeValue
 @(applicationStatus: model.DashboardModel.ApplicationStatus)
 
 @statusWindowHeight(status: model.DashboardModel.ApplicationStatus) = @{
@@ -13,7 +14,7 @@
                 <td colspan="3">
                     @common.applicationStatusIcon(applicationStatus)
                     @if(!applicationStatus.error){
-                        <span class="badge">@applicationStatus.version</span>
+                        <span class="badge bg-secondary">@applicationStatus.version</span>
                     }else{
                         @applicationStatus.statusPageResponse.errorMessage
                     }

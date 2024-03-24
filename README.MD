@@ -25,13 +25,13 @@ Java 7
 
 Building the app
 ===
-$./activator clean test dist
+$./bin/activator clean test dist
 
 Running the app locally
 ===
 $cd application-dashboard
 
-$./activator run
+$./bin/activator run
 
 Go to http://localhost:9000/ in your browser
 

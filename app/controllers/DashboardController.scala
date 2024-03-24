@@ -2,14 +2,17 @@ package controllers
 
 import model.DashboardModel._
 import model._
-import play.api.mvc._
+import play.api.mvc.{BaseController, ControllerComponents}
 import service.{DowntimeHistoryService, VersionHistoryService}
 import utils.RequestUtils
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-object DashboardController extends Controller {
+@Singleton
+class DashboardController @Inject()(val requestUtils: RequestUtils,
+                                    val controllerComponents: ControllerComponents) extends BaseController {
 
   def application(applicationName: String) = Action.async {
     buildDashboardModel(Option(applicationName)).map { applicationStatus =>
@@ -61,7 +64,7 @@ object DashboardController extends Controller {
         environment <- application.environments
         if environmentName.isEmpty || environment.name == environmentName.get
       } yield {
-        RequestUtils.buildApplicationStatusPage(application, environment)
+        requestUtils.buildApplicationStatusPage(application, environment)
       }
 
     Future.sequence(applicationStatusFutureList)

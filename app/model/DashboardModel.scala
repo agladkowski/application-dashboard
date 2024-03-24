@@ -1,20 +1,22 @@
 package model
 
-import java.net.URL
-
 import com.google.gson._
 import config.DashboardConfig
-import org.jboss.netty.handler.codec.http.HttpResponseStatus
+import play.api.http.Status
+
+import java.net.URL
 
 
 /**
  * Created by andrzej on 15/02/2015.
  *
  */
-object DashboardModel {
+object DashboardModel extends Status{
   case class Dashboard(version: String = "1.1", applications: Array[Application])
 
-  case class Application(name: String, statusPageVersionRegex: String, hostRegex: String = "", environments: Array[Environment], links: Array[Link] = Array())
+  case class Application(name: String, attributes: Array[Attribute] = Array(), statusPageVersionRegex: String, hostRegex: String = "", environments: Array[Environment], links: Array[Link] = Array())
+
+  case class Attribute(name: String, regex: String)
 
   case class Link(title: String, href: String) {
     def isRelative: Boolean = href.startsWith("/")
@@ -27,13 +29,16 @@ object DashboardModel {
     }
   }
 
-  case class ApplicationStatus(application: Application, environment: Environment, version: Option[String], host: Option[String], statusPageResponse: WebPageResponse) {
+  case class ApplicationStatus(application: Application, environment: Environment, version: Option[String], host: Option[String], statusPageResponse: WebPageResponse,
+                               attributes: Array[AttributeValue] = Array()) {
     val error: Boolean = statusPageResponse.errorMessage.isDefined
-    val forbidden: Boolean = HttpResponseStatus.FORBIDDEN.getCode == statusPageResponse.httpStatus
-    val timeout: Boolean = HttpResponseStatus.REQUEST_TIMEOUT.getCode == statusPageResponse.httpStatus
+    val forbidden: Boolean = FORBIDDEN == statusPageResponse.httpStatus
+    val timeout: Boolean = REQUEST_TIMEOUT == statusPageResponse.httpStatus
     val isVersionDefined: Boolean = !error && version.isDefined && !version.getOrElse("").startsWith("Invalid") && !version.getOrElse("").isEmpty
     val hasLinks = application.links != null
   }
+
+  case class AttributeValue(name: String, value: String)
 
   case class WebPageResponse(content: String, httpStatus: Int, errorMessage: Option[String])
 

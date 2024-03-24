@@ -1,5 +1,3 @@
-logLevel := Level.Debug
+addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.8.20")
 
-resolvers += "Typesafe repository" at "http://repo.typesafe.com/typesafe/releases/"
-
-addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.3.6")
+ThisBuild / libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always

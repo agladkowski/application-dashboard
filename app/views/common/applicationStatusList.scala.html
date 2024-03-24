@@ -9,9 +9,13 @@
         <td><a href="@status.environment.statusPageUrl">@status.environment.name</a></td>
         <td>&nbsp;&nbsp;</td>
         <td>
-            <span class="badge">@status.version</span>
+            <span class="badge bg-secondary">@status.version</span>
         </td>
-        <td>&nbsp;</td>
+        <td>
+            @status.attributes.map {attribute: AttributeValue =>
+                <span class="badge bg-secondary">@attribute.value</span>
+            }
+        </td>
     </tr>
 }
 </table>

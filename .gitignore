@@ -1,15 +1,5 @@
-logs
-project/project
-project/target
 target
-tmp
-.history
-dist
+/.bsp
 /.idea
-/*.iml
-/out
-/.idea_modules
-/.classpath
-/.project
+/logs
 /RUNNING_PID
-/.settings
